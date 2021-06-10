@@ -20,13 +20,19 @@ let toCity = document.getElementById('city2');
 
 // Метры кубические
 let meters = document.getElementById('meters');
-
 // Килограммы
 let kg = document.getElementById('kg');
-
+let pieces = document.getElementById('pieces');
+let heaviest = document.getElementById('heaviest');
+let longest = document.getElementById('longest')
 // Значения из range инпутов
 let metersRange = document.getElementById('metersRange');
 let kgRange = document.getElementById('kgRange');
+let piecesRange = document.getElementById('piecesrange');
+let heaviestRange = document.getElementById('heaviestRange');
+let longestRange = document.getElementById('longestRange');
+
+
 
 // Чекбоксы
 let checkboxes = document.getElementsByClassName('form-check-input');
@@ -86,8 +92,63 @@ function stepChangeM() {
         meters.setAttribute('step', 1);
     }
 }
-
-
+function fixValueM(val) {
+    if (val < 0.5) {
+        return +(val.toFixed(2));
+    } else if (val >= 0.5 && val < 5) {
+        return +(val.toFixed(1));
+    } else if (val >= 5 && val < 10) {
+        return Math.round(val * 2) / 2;
+    } else if (val >= 10) {
+        return Math.round(val);
+    } else if (val > 80) {
+        return 80
+    }
+}
+function fixValueKg(val) {
+    if (val > 2.25 && val < 3) {
+        return 2.5;
+    } else if (val < 10) {
+        return Math.round(val * 2) / 2;
+    } else if (val >= 10 && val < 50) {
+        return Math.round(val);
+    } else if (val >= 50 && val < 100) {
+        return Math.round(val / 5) * 5;
+    } else if (val >= 100 && val < 1000) {
+        return Math.round(val / 10) * 10;
+    } else if (val >= 1000) {
+        return Math.round(val / 100) * 100;
+    } else if (val > 20000) {
+        return 20000;
+    }
+}
+function fixValuePieces(val) {
+    return Math.round(val);
+}
+function fixValueHeaviest(val) {
+    if (val < 5) {
+        return 5;
+    } else if (val < 30) {
+        return Math.round(val);
+    } else if (val < 100) {
+        return Math.round(val / 5) * 5;
+    } else if (val >= 100 && val <= 1000) {
+        return Math.round(val/50)*50;
+    } else if (val > 1000) {
+        return 1000;
+    }
+}
+function fixValueLongest(val) {
+    if (val < 50) {
+        return Math.round(val / 5) * 5;
+    } else if (val < 100) {
+        return Math.round(val/10) * 10;
+    } else if (val > 100) {
+        return Math.round(val / 25) * 25;
+    } else if (val > 300) {
+        return 300
+    }
+}
 function logsliderKg(position) {
 
     var minp = 1;
@@ -111,6 +172,45 @@ function logsliderM(position) {
     // The result should be between 100 an 10000000
     var minv = Math.log(minMeters);
     var maxv = Math.log(maxMeters);
+
+    // calculate adjustment factor
+    var scale = (maxv - minv) / (maxp - minp);
+
+    return Math.exp(minv + scale * (position - minp));
+}
+function logsliderPieces(position) {
+    var minp = piecesRange.getAttribute('min');
+    var maxp = piecesRange.getAttribute('max');
+
+    // The result should be between 100 an 10000000
+    var minv = Math.log(1);
+    var maxv = Math.log(50);
+
+    // calculate adjustment factor
+    var scale = (maxv - minv) / (maxp - minp);
+
+    return Math.exp(minv + scale * (position - minp));
+}
+function logsliderHeaviest(position) {
+    var minp = heaviestRange.getAttribute('min');
+    var maxp = heaviestRange.getAttribute('max');
+
+    // The result should be between 100 an 10000000
+    var minv = Math.log(5);
+    var maxv = Math.log(1000);
+
+    // calculate adjustment factor
+    var scale = (maxv - minv) / (maxp - minp);
+
+    return Math.exp(minv + scale * (position - minp));
+}
+function logsliderLongest(position) {
+    var minp = longestRange.getAttribute('min');
+    var maxp = longestRange.getAttribute('max');
+
+    // The result should be between 100 an 10000000
+    var minv = Math.log(10);
+    var maxv = Math.log(300);
 
     // calculate adjustment factor
     var scale = (maxv - minv) / (maxp - minp);
@@ -144,45 +244,65 @@ function logInputM(value) {
 
     return (Math.log(value) - minv) / scale + minp;
 }
+function logInputPieces(value)  {
+    var minp = +piecesRange.getAttribute('min');
+    var maxp = +piecesRange.getAttribute('max');
+
+    // The result should be between 100 an 10000000
+    var minv = Math.log(1);
+    var maxv = Math.log(50);
+
+    // calculate adjustment factor
+    var scale = (maxv - minv) / (maxp - minp);
+
+    return (Math.log(value) - minv) / scale + minp;
+}
+function logInputHeaviest(value) {
+    var minp = +heaviestRange.getAttribute('min');
+    var maxp = +heaviestRange.getAttribute('max');
+
+    // The result should be between 100 an 10000000
+    var minv = Math.log(5);
+    var maxv = Math.log(1000);
+
+    // calculate adjustment factor
+    var scale = (maxv - minv) / (maxp - minp);
+
+    return (Math.log(value) - minv) / scale + minp;
+}
+function logInputLongest(value) {
+    var minp = +longestRange.getAttribute('min');
+    var maxp = +longestRange.getAttribute('max');
+
+    // The result should be between 100 an 10000000
+    var minv = Math.log(10);
+    var maxv = Math.log(300);
+
+    // calculate adjustment factor
+    var scale = (maxv - minv) / (maxp - minp);
+
+    return (Math.log(value) - minv) / scale + minp;
+}
 function assignValueRtoI() {
 
     meters.value = fixValueM(logsliderM(+metersRange.value));
 
     kg.value = fixValueKg(logsliderKg(kgRange.value));
+
+    pieces.value = fixValuePieces(logsliderPieces(piecesRange.value));
+
+    heaviest.value = fixValueHeaviest(logsliderHeaviest(heaviestRange.value));
+
+    longest.value = fixValueLongest(logsliderLongest(longestRange.value));
 }
 function assignValueItoR() {
     metersRange.value = fixValueM(logInputM(meters.value));
     kgRange.value = fixValueKg(logInputKg(kg.value));
-}
-function fixValueM(val) {
-    if (val < 0.5) {
-        return +(val.toFixed(2));
-    } else if (val >= 0.5 && val < 5) {
-        return +(val.toFixed(1));
-    } else if (val >= 5 && val < 10) {
-        return Math.round(val * 2) / 2;
-    } else if (val >= 10) {
-        return Math.round(val);
-    } else if (val > 80) {
-        return 80
-    }
-}
-function fixValueKg(val) {
-    if (val > 2.5 && val < 3) {
-        return 2.5;
-    } else if (val < 10) {
-        return Math.round(val * 2) / 2;
-    } else if (val >= 10 && val < 50) {
-        return Math.round(val);
-    } else if (val >= 50 && val < 100) {
-        return Math.round(val / 5) * 5;
-    } else if (val >= 100 && val < 1000) {
-        return Math.round(val / 10) * 10;
-    } else if (val >= 1000) {
-        return Math.round(val / 100) * 100;
-    } else if (val > 20000) {
-        return 20000;
-    }
+    piecesRange.value = fixValuePieces(logInputPieces(pieces.value));
+
+    heaviestRange.value = fixValueHeaviest(logInputHeaviest(heaviest.value));
+
+    longestRange.value = fixValueLongest(logInputLongest(longest.value));
 }
 function fixCities() {
     if (fromCity.value == 'SPB') {
@@ -646,4 +766,63 @@ if (express.checked == true) {
     CalculateExpress('total');
 } else if (econom.checked == true) {
     CalculatorEco(total)
+}
+
+
+// Массив range инпутов (ползунков)
+let ranges = [
+    metersRange,
+    kgRange,
+    piecesRange,
+    heaviestRange,
+    longestRange
+];
+// Массив числовых инпутов
+let valInputs = [
+    kg,
+    meters
+]
+kg.setAttribute('step', 0.5);
+
+assignValueItoR();
+
+meters.addEventListener('input', () => {
+    stepChangeM();
+    if (meters.value > 80) {
+        meters.value = 80;
+    }
+
+})
+kg.addEventListener('input', () => {
+    stepChangekg();
+    if (kg.value > 20000) {
+        kg.value = 20000;
+    }
+})
+
+// Синхронизация range и числовых инпутов
+for (let input of valInputs) {
+    input.addEventListener('input', () => {
+        assignValueItoR();
+    })
+}
+for (let range of ranges) {
+    range.addEventListener('input', () => {
+        assignValueRtoI();
+    })
+}
+changeCitiesbtn.addEventListener('click', () => {
+    let city1 = fromCity.value;
+    let city2 = toCity.value;
+    fromCity.value = city2;
+    toCity.value = city1;
+})
+let cities = [
+    fromCity,
+    toCity
+]
+for (let city of cities) {
+    city.addEventListener('input', () => {
+        fixCities();
+    })
 }

@@ -129,7 +129,7 @@
                     </div>
 
                     <label for="kgRange" class="form-label"></label>
-                    <input type="range" min='0' max="100" step="0.5" class="form-range" value="100" id="kgRange">
+                    <input type="range" min='0' max="100" step="0.01" class="form-range" value="100" id="kgRange">
 
                 </div>
                 <div class="col-sm-2 col-md-2">
@@ -149,7 +149,7 @@
                     <br>
                     <div class="input-group">
 
-                        <input id="pieces" type="number" class="form-control" value="0.01" step="0.01" min="0" max="80"
+                        <input id="pieces" type="number" class="form-control" value="1" step="1" min="0" max="50"
                             aria-label="Sizing example input" aria-describedby="labelpieces">
                         <span class="input-group-text" id="labelpieces">ШТ</span>
                     </div>
@@ -161,18 +161,18 @@
                     Самое тяжелое место <br>
                     <div class="input-group">
 
-                        <input id="heaviest" type="number" class="form-control" value="0.01" step="0.01" min="0"
-                            max="80" aria-label="Sizing example input" aria-describedby="lableheaviest">
+                        <input id="heaviest" type="number" class="form-control" value="5" step="1" min="0"
+                            max="1000" aria-label="Sizing example input" aria-describedby="lableheaviest">
                         <span class="input-group-text" id="lableheaviest">КГ</span>
                     </div>
-                    <label for="metersRange" class="form-label"></label>
+                    <label for="heaviestRange" class="form-label"></label>
                     <input type="range" min="0" max="100" step="0.01" class="form-range" id="heaviestRange">
 
                 </div>
                 <div class="col-sm-2 col-md-2">
                     Самое длинное <br>
                     <div class="input-group">
-                        <input id="longest" type="number" class="form-control" value="0.01" step="0.01" min="0" max="80"
+                        <input id="longest" type="number" class="form-control" value="10" step="1" min="10" max="300"
                             aria-label="Sizing example input" aria-describedby="basic-addon2">
                         <span class="input-group-text" id="basic-addon2">СМ</span>
                     </div>
