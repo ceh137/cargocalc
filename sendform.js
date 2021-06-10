@@ -1,3 +1,9 @@
+const econom = document.getElementById('Ecorad'),
+    express = document.getElementById('Expressrad');
+
+
+
+
 
 const minMeters = 0.01, // Минимальное значение обьема груза
     minKg = 0.5, // Минимальное значение веса груза
@@ -82,9 +88,6 @@ function stepChangeM() {
 }
 
 
-
-
-// Логарифмические функции, которые настраивают поведение инпутов range
 function logsliderKg(position) {
 
     var minp = 1;
@@ -114,7 +117,6 @@ function logsliderM(position) {
 
     return Math.exp(minv + scale * (position - minp));
 }
-// Функции обратные логарифмическим
 function logInputKg(value) {
     var minp = kgRange.getAttribute('min');
     var maxp = kgRange.getAttribute('max');
@@ -142,8 +144,6 @@ function logInputM(value) {
 
     return (Math.log(value) - minv) / scale + minp;
 }
-
-// Функции, присваивающие значения вводов пользователя с ползунка числовому инпуту и наоборот
 function assignValueRtoI() {
 
     meters.value = fixValueM(logsliderM(+metersRange.value));
@@ -154,8 +154,6 @@ function assignValueItoR() {
     metersRange.value = fixValueM(logInputM(meters.value));
     kgRange.value = fixValueKg(logInputKg(kg.value));
 }
-
-// Функции регулирующие поведение ползунков
 function fixValueM(val) {
     if (val < 0.5) {
         return +(val.toFixed(2));
@@ -169,7 +167,6 @@ function fixValueM(val) {
         return 80
     }
 }
-
 function fixValueKg(val) {
     if (val > 2.5 && val < 3) {
         return 2.5;
@@ -187,8 +184,6 @@ function fixValueKg(val) {
         return 20000;
     }
 }
-
-// Функция, которая меняет города, чтобы доставка была в другой город
 function fixCities() {
     if (fromCity.value == 'SPB') {
         toCity.value = 'Moscow';
@@ -196,8 +191,6 @@ function fixCities() {
         toCity.value = 'SPB';
     }
 }
-
-// Функция, которая достает значения выбраных опций
 function getSelectedCheckboxes() {
     let checkboxes = document.getElementsByClassName('form-check-input');
     let selected = [];
@@ -209,8 +202,6 @@ function getSelectedCheckboxes() {
     return selected;
 
 }
-
-// Главная функция калькулятора
 function cargoVol() {
     if (kg.value / 250 > meters.value) {
         return +kg.value / 250;
@@ -218,7 +209,6 @@ function cargoVol() {
         return +meters.value;
     }
 }
-
 function cargoWeight() {
     if (meters.value * 250 < kg.value) {
         return kg.value;
@@ -226,8 +216,6 @@ function cargoWeight() {
         return meters.value * 250;
     }
 }
-
-
 function neededArr(express) {
     if (fromCity.value == "Moscow" && express == false) {
         return arr1;
@@ -239,7 +227,6 @@ function neededArr(express) {
         return arr4;
     }
 }
-
 function priceTypeForAD() {
     if (cargoVol() >= 40) {
         return '40m+';
@@ -267,7 +254,6 @@ function priceTypeForAD() {
         return 'docs'
     }
 }
-
 function priceForAdWithPackage(volume) {
     volume = volume * 1.3;
     if (volume >= 40) {
@@ -290,7 +276,6 @@ function priceForAdWithPackage(volume) {
         return 'upTo1m';
     }
 }
-
 function priceType() {
     if (cargoVol() >= 50) {
         return '50m+';
@@ -312,7 +297,6 @@ function priceType() {
         return 'docs'
     }
 };
-
 function CalculateExpress(res) {
     let array = neededArr(true);
     let optPrices = array['price'][priceType()];
@@ -443,8 +427,7 @@ function CalculateExpress(res) {
 
 
 }
-
-function CalculatorEco() {
+function CalculatorEco(res) {
     let array = neededArr(false);
     let optPrices = array['price'][priceType()];
     let ADprices = array['ADprice'][priceTypeForAD()];
@@ -642,95 +625,25 @@ function CalculatorEco() {
                 break;
         }
     }
-
-    let result = document.getElementById("resultEco");
-
-
-    result.innerText = 'Стоимость ЭКОНОМ: ' + price.toLocaleString('ru-RU') + ' руб.';
-
-}
+    if (res == 'resultEco') {
+        let result = document.getElementById("resultEco");
 
 
-// Массив range инпутов (ползунков)
-let ranges = [
-    metersRange,
-    kgRange
-];
-// Массив числовых инпутов
-let valInputs = [
-    kg,
-    meters
-]
-kg.setAttribute('step', 0.5);
+        result.innerText = 'Стоимость ЭКОНОМ: ' + price.toLocaleString('ru-RU') + ' руб.';
+    } else if (res == 'total') {
+        let result = document.getElementById("total");
 
-assignValueItoR();
 
-meters.addEventListener('input', () => {
-    stepChangeM();
-    if (meters.value > 80) {
-        meters.value = 80;
+        result.innerText = 'ИТОГО ' + price.toLocaleString('ru-RU') + ' руб.';
     }
 
-})
-kg.addEventListener('input', () => {
-    stepChangekg();
-    if (kg.value > 20000) {
-        kg.value = 20000;
-    }
-})
 
-// Синхронизация range и числовых инпутов
-for (let input of valInputs) {
-    input.addEventListener('input', () => {
-        assignValueItoR();
-    })
-}
-for (let range of ranges) {
-    range.addEventListener('input', () => {
-        assignValueRtoI();
-    })
-}
-changeCitiesbtn.addEventListener('click', () => {
-    let city1 = fromCity.value;
-    let city2 = toCity.value;
-    fromCity.value = city2;
-    toCity.value = city1;
-    CalculatorEco();
-    CalculateExpress();
-})
-let cities = [
-    fromCity,
-    toCity
-]
-for (let city of cities) {
-    city.addEventListener('input', () => {
-        fixCities();
-    })
-}
-// Массив всех инпутов
-let AllInputs = [
-    fromCity,
-    toCity,
-    meters,
-    kg,
-    kgRange,
-    metersRange
-];
-// добавление чекбоксов в инпуты
-for (let check of checkboxes) {
-    AllInputs.push(check);
 }
 
-CalculatorEco();
-CalculateExpress();
 
 
-
-// Пересчитывание значение при каждом изменении значений введенных пользователем
-for (let inp of AllInputs) {
-    inp.addEventListener('input', () => {
-        CalculatorEco();
-        CalculateExpress();
-    })
+if (express.checked == true) {
+    CalculateExpress('total');
+} else if (econom.checked == true) {
+    CalculatorEco(total)
 }
-
