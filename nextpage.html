@@ -129,7 +129,7 @@
                     </div>
 
                     <label for="kgRange" class="form-label"></label>
-                    <input type="range" min='0' max="100" step="0.01" class="form-range" value="100" id="kgRange">
+                    <input type="range" min='0' max="100" step="0.5" class="form-range" value="100" id="kgRange">
 
                 </div>
                 <div class="col-sm-2 col-md-2">
@@ -141,7 +141,7 @@
                         <span class="input-group-text" id="labelmeters">M^3</span>
                     </div>
                     <label for="metersRange" class="form-label"></label>
-                    <input type="range" min="0" max="100" step="0.01" class="form-range" id="metersRange">
+                    <input type="range" min="0" max="1000" step="0.01" class="form-range" id="metersRange">
 
                 </div>
                 <div class="col-sm-2 col-md-2">
@@ -154,7 +154,7 @@
                         <span class="input-group-text" id="labelpieces">ШТ</span>
                     </div>
                     <label for="piecesrange" class="form-label"></label>
-                    <input type="range" min="0" max="100" step="0.01" class="form-range" id="piecesrange">
+                    <input type="range" min="0" max="1000" step="0.01" class="form-range" id="piecesrange">
 
                 </div>
                 <div class="col-sm-2 col-md-2">
@@ -166,13 +166,13 @@
                         <span class="input-group-text" id="lableheaviest">КГ</span>
                     </div>
                     <label for="heaviestRange" class="form-label"></label>
-                    <input type="range" min="0" max="100" step="0.01" class="form-range" id="heaviestRange">
+                    <input type="range" min="0" max="1000" step="0.01" class="form-range" id="heaviestRange">
 
                 </div>
                 <div class="col-sm-2 col-md-2">
                     Самое длинное <br>
                     <div class="input-group">
-                        <input id="longest" type="number" class="form-control" value="10" step="1" min="10" max="300"
+                        <input id="longest" type="number" class="form-control" value="10" step="1" min="0" max="300"
                             aria-label="Sizing example input" aria-describedby="basic-addon2">
                         <span class="input-group-text" id="basic-addon2">СМ</span>
                     </div>
@@ -180,6 +180,45 @@
                     <input type="range" min="0" max="100" step="0.01" class="form-range" id="longestRange">
 
                 </div>
+
+                <div class="form-check">
+                    <input class="form-check-input check" type="checkbox" value="opt1" id="check1">
+                    <label class="form-check-label" for="check1" id="labelFor1">
+                        Доставка груза на адрес
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input check" type="checkbox" value="opt2" id="check2">
+                    <label class="form-check-label" for="check2" id="labelFor2">
+                        Забор груза на адресе
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input check" type="checkbox" value="opt3" id="check3">
+                    <label class="form-check-label" for="check3" id="labelFor3">
+                        Жесткая упаковка
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input check" type="checkbox" value="opt4" id="check4">
+                    <label class="form-check-label" for="check4" id="labelFor4">
+                        Упаковка в стретч-пленку
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input check" type="checkbox" value="opt5" id="check5">
+                    <label class="form-check-label" for="check5" id="labelFor5">
+                        Упаковка в паллет-борт
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input check" type="checkbox" value="opt6" id="check6">
+                    <label class="form-check-label" for="check6" id="labelFor6">
+                        Страховка
+                    </label>
+                </div>
+
+
             </div>
         </div>
 

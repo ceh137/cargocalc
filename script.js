@@ -413,34 +413,38 @@ function CalculateExpress(res) {
                 break;
             case "opt1":
                 let toAddressPrice = 0;
+                let priceADWithPackage =  [];
+                let arr = [];
                 if (options.includes('opt3') || options.includes('opt5')) {
-                    let arr = neededArr(true);
-                    let priceADWithPackage = arr['ADprice'][priceForAdWithPackage(volume)];
-                    toAddressPrice = priceADWithPackage['toAddress'];
+
+                    if (priceType() == "minP" || priceType() == "single" || priceType() == "docs") {
+                        arr = neededArr(true);
+                        console.log(arr);
+                        priceADWithPackage = arr['ADprice'][priceType()];
+                        toAddressPrice = priceADWithPackage['toAddress'];
+                    } else {
+                        let arr = neededArr(true);
+                        let priceADWithPackage = arr['ADprice'][priceForAdWithPackage(volume)];
+                        toAddressPrice = priceADWithPackage['toAddress'];
+                    }
                 } else {
                     toAddressPrice = ADprices['toAddress'];
                 }
 
                 price += toAddressPrice;
+
+
             //toAddressLabel.innerText = "Доставка груза на адрес (" + toAddressPrice.toLocaleString('ru-Ru') + " руб.)";
             default:
                 break;
         }
     }
 
-    if(res == 'resultExpress') {
+
         let result = document.getElementById("resultExpress");
 
 
         result.innerText = 'Стоимость ЭКСПРЕСС: ' + price.toLocaleString('ru-RU') + ' руб.';
-    } else if (res == 'total') {
-        let result = document.getElementById("total");
-
-
-        result.innerText = 'ИТОГО: ' + price.toLocaleString('ru-RU') + ' руб.';
-    }
-
-
 
 }
 
@@ -545,10 +549,20 @@ function CalculatorEco() {
                 break;
             case "opt1":
                 let toAddressPrice = 0;
+                let priceADWithPackage =  [];
+                let arr = [];
                 if (options.includes('opt3') || options.includes('opt5')) {
-                    let arr = neededArr(false);
-                    let priceADWithPackage = arr['ADprice'][priceForAdWithPackage(volume)];
-                    toAddressPrice = priceADWithPackage['toAddress'];
+
+                    if (priceType() == "minP" || priceType() == "single" || priceType() == "docs") {
+                        arr = neededArr(false);
+                        console.log(arr);
+                        priceADWithPackage = arr['ADprice'][priceType()];
+                        toAddressPrice = priceADWithPackage['toAddress'];
+                    } else {
+                        let arr = neededArr(false);
+                        let priceADWithPackage = arr['ADprice'][priceForAdWithPackage(volume)];
+                        toAddressPrice = priceADWithPackage['toAddress'];
+                    }
                 } else {
                     toAddressPrice = ADprices['toAddress'];
                 }
@@ -629,13 +643,25 @@ function CalculatorEco() {
                 break;
             case "opt1":
                 let toAddressPrice = 0;
+                let priceADWithPackage =  [];
+                let arr = [];
                 if (options.includes('opt3') || options.includes('opt5')) {
-                    let arr = neededArr(false);
-                    let priceADWithPackage = arr['ADprice'][priceForAdWithPackage(volume)];
-                    toAddressPrice = priceADWithPackage['toAddress'];
+
+                    if (priceType() == "minP" || priceType() == "single" || priceType() == "docs") {
+                        arr = neededArr(false);
+                        console.log(arr);
+                        priceADWithPackage = arr['ADprice'][priceType()];
+                        toAddressPrice = priceADWithPackage['toAddress'];
+                    } else {
+                        let arr = neededArr(false);
+                        let priceADWithPackage = arr['ADprice'][priceForAdWithPackage(volume)];
+                        toAddressPrice = priceADWithPackage['toAddress'];
+                    }
                 } else {
                     toAddressPrice = ADprices['toAddress'];
                 }
+
+                
 
                 toAddressLabel.innerText = "Доставка груза на адрес (" + toAddressPrice.toLocaleString('ru-Ru') + " руб.)";
             default:
