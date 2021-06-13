@@ -44,7 +44,7 @@
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="inTime1">
                         <label class="form-check-label" for="inTime1">
-                            Фиксированное время (+500 р.)
+                            Фиксированное время +\- 2ч (+500 р.)
                         </label>
                     </div>
                     <div class="container">
@@ -83,14 +83,14 @@
                     <p id="arrExpress" class="text-center"></p>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="torad" id="flexRadioDefault1">
-                        <label class="form-check-label" for="flexRadioDefault1">
+                        <input class="form-check-input" type="radio" name="torad" id="toAddress">
+                        <label class="form-check-label" for="toAddress">
                             До адреса
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="torad" id="flexRadioDefault2" checked>
-                        <label class="form-check-label" for="flexRadioDefault2">
+                        <input class="form-check-input" type="radio" name="torad" id="toTerminal" checked>
+                        <label class="form-check-label" for="toTerminal">
                             До терминала
                         </label>
                     </div>
@@ -100,15 +100,15 @@
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="inTime2">
                         <label class="form-check-label" for="inTime2">
-                            Фиксированное время (+500 р.)
+                            Фиксированное время +\- 2ч (+500 р.)
                         </label>
                     </div>
                     <div class="container">
                         От
-                        <div class="col"><input class="form-control my-2" id="Intime3" type="time" placeholder="time">
+                        <div class="col"><input class="form-control my-2" id="Intime3" type="time" step="1800" placeholder="time">
                         </div>
                         До
-                        <div class="col"><input class="form-control my-2" id="Intime4" type="time" placeholder="time">
+                        <div class="col"><input class="form-control my-2" id="Intime4" type="time" step="1800" placeholder="time">
                         </div>
                     </div>
                 </div>
@@ -215,6 +215,20 @@
                     <input class="form-check-input check" type="checkbox" value="opt6" id="check6">
                     <label class="form-check-label" for="check6" id="labelFor6">
                         Страховка
+                    </label>
+
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input check" type="checkbox" value="opt7" id="check7">
+                    <label class="form-check-label" for="check7" id="labelFor7">
+                        ПРР на адресе забора груза
+                    </label>
+
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input check" type="checkbox" value="opt8" id="check8">
+                    <label class="form-check-label" for="check8" id="labelFor8">
+                        ПРР на адресе доставки груза
                     </label>
 
                 </div>

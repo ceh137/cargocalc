@@ -1,3 +1,6 @@
+
+
+
 function timer() {
     let now = new Date();
     let year = now.getFullYear();
@@ -81,7 +84,7 @@ function timer() {
         hour1 = time.getHours();
         minutes1 = time.getMinutes();
         let time1 = new Date(year1, month1, date1, hour1, minutes1);
-        let time2 = new Date(year, month, date, 21, 00, 00);
+        let time2 = new Date(year, month, date, 21);
         different = time2 - time1;
         let days = Math.floor(different/86400000);
         let hours = Math.floor((different % 86400000) / 3600000);
@@ -104,7 +107,7 @@ function timer() {
         hour1 = time.getHours();
         minutes1 = time.getMinutes();
         let time1 = new Date(year1, month1, date1, hour1, minutes1);
-        let time2 = new Date(year, month, date, 21, 00, 00);
+        let time2 = new Date(year, month, date, 21);
         different = time2 - time1;
         let days = Math.floor(different/86400000);
         let hours = Math.floor((different % 86400000) / 3600000);
@@ -119,6 +122,7 @@ function timer() {
         document.getElementById('DepExpress').innerText = 'Машина выезжает через  ' + result;
 
     }
+
 
 
 }
@@ -426,3 +430,28 @@ function getDepTimeEconom() {
 }
 timer();
 setInterval(timer, 1000 * 60);
+
+function dateManage() {
+    let m1 = month1+1
+    if (m1 < 10) {
+        m1 = '0'+m1;
+    }
+    document.getElementById('dateFrom').min = year1 + '-' + m1 + '-' + date1;
+    document.getElementById('dateTo').min = year1 + '-' + m1 + '-' + date1;
+
+    let m2 = month1 + 2;
+    let y = year1;
+    if (m2 >= 12) {
+        y  += 1;
+        m2 = 1
+    }
+    if (m2 < 10) {
+        m2 = '0'+m2;
+    }
+    document.getElementById('dateFrom').max = y + '-' + m2 + '-' + date1;
+    document.getElementById('dateTo').max = y + '-' + m2 + '-' + date1;
+}
+function timeManage() {
+
+}
+dateManage();
