@@ -12,12 +12,19 @@ const minMeters = 0.01, // Минимальное значение обьема 
     minInsurance = 30,
     minBort = 200,
     minStretch = 100,
-    minRigidPac = 500;
+    minRigidPac = 500,
+    ADfixMSK = 500,
+    ADfixSPB = 500,
+    INSpercent = 0.5,
+    MakeIt = 50, // Оплата за услугу "Оформим за вас"
+    OversizeAD = 1.3, // Множитель при негабаритном грузе для AД
+    OversizeTerm = 1.25; //Множитель при негабаритном грузе для терминальной доставки
+
 
 // Города
 let fromCity = document.getElementById('city1');
 let toCity = document.getElementById('city2');
-
+let worth = document.getElementById('worth');
 // Метры кубические
 let meters = document.getElementById('meters');
 // Килограммы
@@ -39,7 +46,9 @@ let stretchPacLabel = document.getElementById("labelFor4");
 let bortLabel = document.getElementById("labelFor5");
 let insuranceLabel = document.getElementById("labelFor6");
 
-
+let PaymentSender = document.getElementById('PaymentSender');
+let PaymentReceiver = document.getElementById('PaymentReceiver');
+let Payment3dpatry = document.getElementById('Payment3dparty');
 // Чекбоксы
 let checkboxes = document.getElementsByClassName('check');
 
@@ -47,7 +56,184 @@ let checkboxes = document.getElementsByClassName('check');
 
 
 let changeCitiesbtn = document.getElementById("changeCities");
+//
+let PayAll = Array.apply(null,  document.getElementsByClassName('PayAll'));
+let PayTermTransfer = Array.apply(null,  document.getElementsByClassName('PayTermTransfer'));
+let PayPac = Array.apply(null,  document.getElementsByClassName('PayPac'));
+let PayIns = Array.apply(null,  document.getElementsByClassName('PayIns'));
+let PayFromAddressToTerm = Array.apply(null,  document.getElementsByClassName('PayFromAddressToTerm'));
+let PayPRRatAddress = Array.apply(null,  document.getElementsByClassName('PayPRRatAddress'));
+let PayFromTermToAddress = Array.apply(null,  document.getElementsByClassName('PayFromTermToAddress'));
+let PayPRRtoAddress = Array.apply(null,  document.getElementsByClassName('PayPRRtoAddress'));
 
+let Sender = document.getElementsByClassName('Sender');
+let Receiver = document.getElementsByClassName('Receiver');
+let ThirdParty = document.getElementsByClassName('3dparty');
+
+
+
+PayAll.forEach(radioBtn => {
+    let checked = false;
+
+    radioBtn.addEventListener("mousedown", event => {
+        checked = radioBtn.checked;
+    });
+    radioBtn.addEventListener("click", event => {
+        radioBtn.checked = !checked;
+        CalculateSubtotals();
+        disableRads(radioBtn);
+    });
+    });
+
+PayTermTransfer.forEach(radioBtn => {
+    let checked = false;
+
+    radioBtn.addEventListener("mousedown", event => {
+        checked = radioBtn.checked;
+    });
+    radioBtn.addEventListener("click", event => {
+        radioBtn.checked = !checked;
+        CalculateSubtotals();
+    });
+});
+PayPac.forEach(radioBtn => {
+    let checked = false;
+
+    radioBtn.addEventListener("mousedown", event => {
+        checked = radioBtn.checked;
+    });
+    radioBtn.addEventListener("click", event => {
+        radioBtn.checked = !checked;
+        CalculateSubtotals();
+    });
+});
+PayIns.forEach(radioBtn => {
+    let checked = false;
+
+    radioBtn.addEventListener("mousedown", event => {
+        checked = radioBtn.checked;
+    });
+    radioBtn.addEventListener("click", event => {
+        radioBtn.checked = !checked;
+        CalculateSubtotals();
+    });
+});
+PayFromTermToAddress.forEach(radioBtn => {
+    let checked = false;
+
+    radioBtn.addEventListener("mousedown", event => {
+        checked = radioBtn.checked;
+    });
+    radioBtn.addEventListener("click", event => {
+        radioBtn.checked = !checked;
+        CalculateSubtotals();
+    });
+});
+PayFromAddressToTerm.forEach(radioBtn => {
+    let checked = false;
+
+    radioBtn.addEventListener("mousedown", event => {
+        checked = radioBtn.checked;
+    });
+    radioBtn.addEventListener("click", event => {
+        radioBtn.checked = !checked;
+        CalculateSubtotals();
+    });
+});
+PayPRRtoAddress.forEach(radioBtn => {
+    let checked = false;
+
+    radioBtn.addEventListener("mousedown", event => {
+        checked = radioBtn.checked;
+    });
+    radioBtn.addEventListener("click", event => {
+        radioBtn.checked = !checked;
+        CalculateSubtotals();
+    });
+});
+PayPRRatAddress.forEach(radioBtn => {
+    let checked = false;
+
+    radioBtn.addEventListener("mousedown", event => {
+        checked = radioBtn.checked;
+    });
+    radioBtn.addEventListener("click", event => {
+        radioBtn.checked = !checked;
+        CalculateSubtotals();
+    });
+});
+
+function disableRads(rad) {
+    if (rad.checked == true) {
+        PayTermTransfer.forEach(radioBtn => {
+            radioBtn.checked = false;
+            radioBtn.disabled = true;
+        });
+        PayPac.forEach(radioBtn => {
+            radioBtn.checked = false;
+            radioBtn.disabled = true;
+        });
+        PayIns.forEach(radioBtn => {
+            radioBtn.checked = false;
+            radioBtn.disabled = true;
+        })
+        PayFromTermToAddress.forEach(radioBtn => {
+            radioBtn.checked = false;
+            radioBtn.disabled = true;
+        });
+        PayFromAddressToTerm.forEach(radioBtn => {
+            radioBtn.checked = false;
+            radioBtn.disabled = true;
+        });
+        PayPRRtoAddress.forEach(radioBtn => {
+            radioBtn.checked = false;
+            radioBtn.disabled = true;
+        });
+        PayPRRatAddress.forEach(radioBtn => {
+            radioBtn.checked = false;
+            radioBtn.disabled = true;
+        });
+    } else {
+        PayTermTransfer.forEach(radioBtn => {
+            radioBtn.disabled = false;
+        });
+        PayPac.forEach(radioBtn => {
+            radioBtn.disabled = false;
+        });
+        PayIns.forEach(radioBtn => {
+            radioBtn.disabled = false;
+        })
+        PayFromTermToAddress.forEach(radioBtn => {
+            radioBtn.disabled = false;
+        });
+        PayFromAddressToTerm.forEach(radioBtn => {
+            radioBtn.disabled = false;
+        });
+        PayPRRtoAddress.forEach(radioBtn => {
+            radioBtn.disabled = false;
+        });
+        PayPRRatAddress.forEach(radioBtn => {
+            radioBtn.disabled = false;
+    })
+}}
+
+let packageRad = Array.apply(null,  document.getElementsByName('package'));
+packageRad.forEach(rad => {
+    let checked = false;
+
+    rad.addEventListener("mousedown", event => {
+        checked = rad.checked;
+    });
+    rad.addEventListener("click", event => {
+        rad.checked = !checked;
+        if (express.checked == true) {
+            CalculateExpress('total');
+        } else if (econom.checked == true) {
+            CalculatorEco('total')
+        }
+        CalculateSubtotals();
+    });
+})
 kg.max = 20000;
 kg.value = 2.5;
 kg.min = 0;
@@ -70,7 +256,8 @@ let allInputs = [
     toCity,
     fromCity,
     econom,
-    express
+    express,
+    worth
 ]
 
 for (let check of checkboxes) {
@@ -131,7 +318,7 @@ function stepChangeLongest() {
     } else if (longest.value >= 50 && longest.value < 90) {
         longest.setAttribute('step', '10');
     } else if (longest.value >= 90 && longest.value < 300) {
-        longest.setAttribute('step', '25');
+        longest.setAttribute('step', '20');
     }
 }
 function fixValueM(val) {
@@ -468,22 +655,49 @@ function CalculateExpress(res) {
     let ADprices = array['ADprice'][priceTypeForAD()];
     let volume = cargoVol();
     let weight = cargoWeight();
+    let heaviestVal = +heaviest.value;
+    let longestVal = +longest.value;
+    let worthVal = +worth.value;
     let price = 0;
     let options = getSelectedCheckboxes();
+    let TT = 0;
     if (options.includes('opt3') || options.includes('opt5')) {
         let volumeWithPackage = volume * 1.3;
+
         if (priceType() == "minP" || priceType() == "single" || priceType() == "docs") {
-            price += optPrices['send'];
+            TT = optPrices['send'];
+            if (heaviestVal > 999 || longestVal > 120) {
+                TT = TT*OversizeTerm;
+
+            }
+            price += TT;
         } else {
-            price += optPrices['forunit'] * volumeWithPackage;
+            TT = optPrices['forunit'] * volumeWithPackage;
+            if (heaviestVal > 999 || longestVal > 120) {
+                TT = TT*OversizeTerm;
+
+            }
+            price += TT;
         }
     } else {
         // Transportation T-T
         if (priceType() == "minP" || priceType() == "single" || priceType() == "docs") {
-            price += optPrices['send'];
+            TT = optPrices['send'];
+            if (heaviestVal > 999 || longestVal > 120) {
+                TT = TT*OversizeTerm;
+
+            }
+            price += TT;
         } else {
-            price += optPrices['forunit'] * volume;
+            TT = optPrices['forunit'] * volume;
+            if (heaviestVal > 999 || longestVal > 120) {
+                TT = TT*OversizeTerm;
+            }
+            price += TT;
         }
+    }
+    for (let check of PayTermTransfer) {
+        check.value = price;
     }
 
 
@@ -508,7 +722,18 @@ function CalculateExpress(res) {
 
                     }
                 }
-                insuranceLabel.innerText = "Страховка (" + insurance.toLocaleString('ru-Ru') + " руб.)";
+
+                if (worthVal > 0 ) {
+                    insurance = worthVal*INSpercent/100;
+                    if (insurance < minInsurance) {
+                        insurance = minInsurance;
+                    }
+                    price += insurance;
+                }
+                for (let check of PayIns) {
+                    check.setAttribute('value', insurance);
+                }
+                //insuranceLabel.innerText = "Страховка (" + insurance.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt5":
                 let bortPrice = 0;
@@ -523,6 +748,9 @@ function CalculateExpress(res) {
                     }
                 }
                 price += bortPrice;
+                for (let check of PayPac) {
+                    check.setAttribute('value', bortPrice);
+                }
                 //bortLabel.innerText = "Упаковка в паллет-борт (" + bortPrice.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt4":
@@ -538,6 +766,9 @@ function CalculateExpress(res) {
                     }
                 }
                 price += stretchPacPrice;
+                for (let check of PayPac) {
+                    check.setAttribute('value', stretchPacPrice);
+                }
                 //stretchPacLabel.innerText = "Упаковка в стретч-пленку (" + stretchPacPrice.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt3":
@@ -552,12 +783,21 @@ function CalculateExpress(res) {
                         rigidPacPrice = +optPrices['rigidPac'] * volume;
                     }
                 }
+                for (let check of PayPac) {
+                    check.setAttribute('value', rigidPacPrice);
+                }
                 price += rigidPacPrice;
                 //rigidPacLabel.innerText = "Жесткая упаковка (" + rigidPacPrice.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt2":
                 let fromAddressPrice = ADprices['fromAddress'];
+                if (heaviestVal > 999 || longestVal > 120) {
+                    fromAddressPrice = fromAddressPrice *OversizeAD;
+                }
                 price += fromAddressPrice;
+                for (let check of PayFromAddressToTerm) {
+                    check.setAttribute('value', fromAddressPrice);
+                }
                 //fromAddressLabel.innerText = "Забор груза на адресе (" + fromAddressPrice.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt1":
@@ -570,6 +810,9 @@ function CalculateExpress(res) {
                         console.log(arr);
                         priceADWithPackage = arr['ADprice'][priceType()];
                         toAddressPrice = priceADWithPackage['toAddress'];
+                        if (heaviestVal > 999 || longestVal > 120) {
+                            toAddressPrice = toAddressPrice *OversizeAD;
+                        }
                     } else {
                         arr = neededArr(true);
                         console.log(priceForAdWithPackage(volume))
@@ -577,10 +820,20 @@ function CalculateExpress(res) {
                         priceADWithPackage = arr['ADprice'][priceForAdWithPackage(volume)];
                         console.log(priceForAdWithPackage(volume));
                         toAddressPrice = priceADWithPackage['toAddress']
+                        if (heaviestVal > 999 || longestVal > 120) {
+                            toAddressPrice = toAddressPrice*OversizeAD;
+                        }
                     }
 
                 } else {
                     toAddressPrice = ADprices['toAddress'];
+                    if (heaviestVal > 999 || longestVal > 120) {
+                        toAddressPrice = toAddressPrice*OversizeAD;
+                    }
+                }
+
+                for (let check of PayFromTermToAddress) {
+                    check.setAttribute('value', toAddressPrice);
                 }
                 price += toAddressPrice;
             //toAddressLabel.innerText = "Доставка груза на адрес (" + toAddressPrice.toLocaleString('ru-Ru') + " руб.)";
@@ -606,6 +859,13 @@ function CalculateExpress(res) {
 
                     } else {
                         insurance = +optPrices['insPerKG'] * weight;
+                    }
+                }
+
+                if (worthVal > 0 ) {
+                    insurance = worthVal*INSpercent/100;
+                    if (insurance < minInsurance) {
+                        insurance = minInsurance;
                     }
                 }
                 insuranceLabel.innerText = "Страховка (" + insurance.toLocaleString('ru-Ru') + " руб.)";
@@ -654,11 +914,14 @@ function CalculateExpress(res) {
                 break;
             case "opt2":
                 let fromAddressPrice = ADprices['fromAddress'];
+                if (heaviestVal > 999 || longestVal > 120) {
+                    fromAddressPrice = fromAddressPrice *OversizeAD;
+                }
                 fromAddressLabel.innerText = "Забор груза на адресе (" + fromAddressPrice.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt1":
                 let toAddressPrice = 0;
-                let arr ={};
+                let arr = {};
                 let priceADWithPackage = {};
                 if (options.includes('opt3') || options.includes('opt5')) {
                     if (priceType() == "minP" || priceType() == "single" || priceType() == "docs") {
@@ -666,24 +929,33 @@ function CalculateExpress(res) {
                         console.log(arr);
                         priceADWithPackage = arr['ADprice'][priceType()];
                         toAddressPrice = priceADWithPackage['toAddress'];
+                        if (heaviestVal > 999 || longestVal > 120) {
+                            toAddressPrice = toAddressPrice *OversizeAD;
+                        }
                     } else {
                         arr = neededArr(true);
                         console.log(priceForAdWithPackage(volume))
                         console.log(arr);
                         priceADWithPackage = arr['ADprice'][priceForAdWithPackage(volume)];
                         console.log(priceForAdWithPackage(volume));
-                        toAddressPrice = priceADWithPackage['toAddress']
+                        toAddressPrice = priceADWithPackage['toAddress'];
+                        if (heaviestVal > 999 || longestVal > 120) {
+                            toAddressPrice = toAddressPrice*OversizeAD;
+                        }
                     }
 
                 } else {
                     toAddressPrice = ADprices['toAddress'];
+                    if (heaviestVal > 999 || longestVal > 120) {
+                        toAddressPrice = toAddressPrice*OversizeAD;
+                    }
                 }
 
                 toAddressLabel.innerText = "Доставка груза на адрес (" + toAddressPrice.toLocaleString('ru-Ru') + " руб.)";
             default:
                 break;
         }
-
+    }
     if(res == 'resultExpress') {
         let result = document.getElementById("resultExpress");
 
@@ -692,13 +964,15 @@ function CalculateExpress(res) {
     } else if (res == 'total') {
         let result = document.getElementById("total");
 
-
+        for (let check of PayAll) {
+            check.value = price;
+        }
         result.innerText = 'ИТОГО: ' + price.toLocaleString('ru-RU') + ' руб.';
     }
 
 
 
-}}
+}
 
 function CalculatorEco(res) {
     let array = neededArr(false);
@@ -706,22 +980,50 @@ function CalculatorEco(res) {
     let ADprices = array['ADprice'][priceTypeForAD()];
     let volume = cargoVol();
     let weight = cargoWeight();
+    let heaviestVal = +heaviest.value;
+    let longestVal = +longest.value;
+    let worthVal = +worth.value;
     let price = 0;
     let options = getSelectedCheckboxes();
+    let TT = 0;
     if (options.includes('opt3') || options.includes('opt5')) {
         let volumeWithPackage = volume * 1.3;
+
         if (priceType() == "minP" || priceType() == "single" || priceType() == "docs") {
-            price += optPrices['send'];
+            TT = optPrices['send'];
+            if (heaviestVal > 999 || longestVal > 120) {
+                TT = TT*OversizeTerm;
+
+            }
+            price += TT;
         } else {
-            price += optPrices['forunit'] * volumeWithPackage;
+            TT = optPrices['forunit'] * volumeWithPackage;
+            if (heaviestVal > 999 || longestVal > 120) {
+                TT = TT*OversizeTerm;
+
+            }
+            price += TT;
         }
     } else {
         // Transportation T-T
         if (priceType() == "minP" || priceType() == "single" || priceType() == "docs") {
-            price += optPrices['send'];
+            TT = optPrices['send'];
+            if (heaviestVal > 999 || longestVal > 120) {
+                TT = TT*OversizeTerm;
+
+            }
+            price += TT;
         } else {
-            price += optPrices['forunit'] * volume;
+            TT = optPrices['forunit'] * volume;
+            if (heaviestVal > 999 || longestVal > 120) {
+                TT = TT*OversizeTerm;
+
+            }
+            price += TT;
         }
+    }
+    for (let check of PayTermTransfer) {
+        check.value = price;
     }
 
 
@@ -747,6 +1049,15 @@ function CalculatorEco(res) {
 
                     }
                 }
+                if (worthVal > 0 ) {
+                    insurance = worthVal*INSpercent/100;
+                    if (insurance < minInsurance) {
+                        insurance = minInsurance;
+                    }
+                }
+                for (let check of PayIns) {
+                    check.setAttribute('value', insurance);
+                }
                 insuranceLabel.innerText = "Страховка (" + insurance.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt5":
@@ -762,6 +1073,9 @@ function CalculatorEco(res) {
                     }
                 }
                 price += bortPrice;
+                for (let check of PayPac) {
+                    check.setAttribute('value', bortPrice);
+                }
                 bortLabel.innerText = "Упаковка в паллет-борт (" + bortPrice.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt4":
@@ -777,6 +1091,9 @@ function CalculatorEco(res) {
                     }
                 }
                 price += stretchPacPrice;
+                for (let check of PayPac) {
+                    check.setAttribute('value', stretchPacPrice);
+                }
                 stretchPacLabel.innerText = "Упаковка в стретч-пленку (" + stretchPacPrice.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt3":
@@ -792,11 +1109,20 @@ function CalculatorEco(res) {
                     }
                 }
                 price += rigidPacPrice;
+                for (let check of PayPac) {
+                    check.setAttribute('value', rigidPacPrice);
+                }
                 rigidPacLabel.innerText = "Жесткая упаковка (" + rigidPacPrice.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt2":
                 let fromAddressPrice = ADprices['fromAddress'];
+                if (heaviestVal > 999 || longestVal > 120) {
+                    fromAddressPrice = fromAddressPrice *OversizeAD;
+                }
                 price += fromAddressPrice;
+                for (let check of PayFromAddressToTerm) {
+                    check.setAttribute('value', fromAddressPrice);
+                }
                 fromAddressLabel.innerText = "Забор груза на адресе (" + fromAddressPrice.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt1":
@@ -810,15 +1136,26 @@ function CalculatorEco(res) {
                         console.log(arr);
                         priceADWithPackage = arr['ADprice'][priceType()];
                         toAddressPrice = priceADWithPackage['toAddress'];
+                        if (heaviestVal > 999 || longestVal > 120) {
+                            toAddressPrice = toAddressPrice *OversizeAD;
+                        }
                     } else {
                         let arr = neededArr(false);
                         let priceADWithPackage = arr['ADprice'][priceForAdWithPackage(volume)];
                         toAddressPrice = priceADWithPackage['toAddress'];
+                        if (heaviestVal > 999 || longestVal > 120) {
+                            toAddressPrice = toAddressPrice *OversizeAD;
+                        }
                     }
                 } else {
                     toAddressPrice = ADprices['toAddress'];
+                    if (heaviestVal > 999 || longestVal > 120) {
+                        toAddressPrice = toAddressPrice*OversizeAD;
+                    }
                 }
-
+                for (let check of PayFromTermToAddress) {
+                    check.setAttribute('value', toAddressPrice);
+                }
                 price += toAddressPrice;
             //toAddressLabel.innerText = "Доставка груза на адрес (" + toAddressPrice.toLocaleString('ru-Ru') + " руб.)";
             default:
@@ -845,6 +1182,12 @@ function CalculatorEco(res) {
                         insurance = +optPrices['insPerKG'] * weight;
                     }
                 }
+                if (worthVal > 0 ) {
+                    insurance = worthVal*INSpercent/100;
+                    if (insurance < minInsurance) {
+                        insurance = minInsurance;
+                    }
+                }
                 insuranceLabel.innerText = "Страховка (" + insurance.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt5":
@@ -891,7 +1234,11 @@ function CalculatorEco(res) {
                 break;
             case "opt2":
                 let fromAddressPrice = ADprices['fromAddress'];
+                if (heaviestVal > 999 || longestVal > 120) {
+                    fromAddressPrice = fromAddressPrice *OversizeAD;
+                }
                 fromAddressLabel.innerText = "Забор груза на адресе (" + fromAddressPrice.toLocaleString('ru-Ru') + " руб.)";
+
                 break;
             case "opt1":
                  let toAddressPrice = 0;
@@ -903,13 +1250,22 @@ function CalculatorEco(res) {
                         console.log(arr);
                         priceADWithPackage = arr['ADprice'][priceType()];
                         toAddressPrice = priceADWithPackage['toAddress'];
+                        if (heaviestVal > 999 || longestVal > 120) {
+                            toAddressPrice = toAddressPrice *OversizeAD;
+                        }
                     } else {
                         let arr = neededArr(false);
                         let priceADWithPackage = arr['ADprice'][priceForAdWithPackage(volume)];
                         toAddressPrice = priceADWithPackage['toAddress'];
+                        if (heaviestVal > 999 || longestVal > 120) {
+                            toAddressPrice = toAddressPrice*OversizeAD;
+                        }
                     }
                 } else {
                     toAddressPrice = ADprices['toAddress'];
+                    if (heaviestVal > 999 || longestVal > 120) {
+                        toAddressPrice = toAddressPrice*OversizeAD;
+                    }
                 }
                 console.log(toAddressPrice);
                 toAddressLabel.innerText = "Доставка груза на адрес (" + toAddressPrice.toLocaleString('ru-Ru') + " руб.)";
@@ -926,19 +1282,84 @@ function CalculatorEco(res) {
     } else if (res == 'total') {
         let result = document.getElementById("total");
 
-
+        for (let check of PayAll) {
+            check.value = price;
+        }
         result.innerText = 'ИТОГО: ' + price.toLocaleString('ru-RU') + ' руб.';
     }
 
 
+}
+function CalculateSubtotals(who) {
+
+    //if (who == 'sender') {
+        let subtotal = 0;
+        for (let check of Sender) {
+            if (document.getElementById('PayAllSender').checked == true ){
+                check.checked = false;
+                subtotal = +document.getElementById('PayAllSender').value;
+                console.log(subtotal);
+            } else {
+                if (check.value == undefined) {
+                    check.value =0;
+                }
+                if (check.checked ==true) {
+                    subtotal += +check.value;
+                }
+
+            }
+        }
+        console.log(subtotal);
+        document.getElementById('PaymentSender').innerText = 'Оплата: ' + subtotal.toLocaleString('ru-RU');
+    //} else if (who == 'receiver') {
+        subtotal = 0;
+        for (let check of Receiver) {
+            if (document.getElementById('PayAllReceiver').checked == true ){
+                check.checked = false;
+                subtotal = +document.getElementById('PayAllReceiver').value;
+                console.log(subtotal);
+            } else {
+                if (check.value == undefined) {
+                    check.value =0;
+                }
+                if (check.checked ==true) {
+                    subtotal += +check.value;
+                }
+
+            }
+        }
+        console.log(subtotal);
+        document.getElementById('PaymentReceiver').innerText = 'Оплата: ' + subtotal.toLocaleString('ru-RU');
+   // } else if (who = '3dparty') {
+        subtotal = 0;
+        for (let check of ThirdParty) {
+            if (document.getElementById('PayAll3dparty').checked == true ){
+                check.checked = false;
+                subtotal = +document.getElementById('PayAll3dparty').value;
+                console.log(subtotal);
+            } else {
+                if (check.value == undefined) {
+                    check.value =0;
+                }
+                if (check.checked ==true) {
+                    subtotal += +check.value;
+                }
+
+            }
+        }
+        console.log(subtotal);
+        document.getElementById('Payment3dparty').innerText = 'Оплата: ' + subtotal.toLocaleString('ru-RU');
+   //}
 }
 
 
 if (express.checked == true) {
     CalculateExpress('total');
 } else if (econom.checked == true) {
-    CalculatorEco(total)
+    CalculatorEco('total')
 }
+
+
 
 
 // Массив range инпутов (ползунков)
@@ -1034,5 +1455,50 @@ for (let inp of allInputs) {
         } else if (econom.checked == true) {
             CalculatorEco('total')
         }
+        CalculateSubtotals('sender');
     })
 }
+
+
+for (let check of Sender) {
+    check.addEventListener('input', () => {
+        if (express.checked == true) {
+            CalculateExpress('total');
+        } else if (econom.checked == true) {
+            CalculatorEco('total')
+        }
+
+        CalculateSubtotals('sender');
+    })
+}
+for (let check of Receiver) {
+    check.addEventListener('input', () => {
+        if (express.checked == true) {
+            CalculateExpress('total');
+        } else if (econom.checked == true) {
+            CalculatorEco('total')
+        }
+        CalculateSubtotals('receiver');
+    })
+}
+for (let check of ThirdParty) {
+    check.addEventListener('input', () => {
+        if (express.checked == true) {
+            CalculateExpress('total');
+        } else if (econom.checked == true) {
+            CalculatorEco('total')
+        }
+        CalculateSubtotals('3dparty');
+    })
+}
+
+document.getElementById('PayAllSender').addEventListener('input', () => {
+
+    CalculateSubtotals('sender');
+})
+document.getElementById('PayAllReceiver').addEventListener('input', () => {
+    CalculateSubtotals('receiver');
+})
+document.getElementById('PayAll3dparty').addEventListener('input', () => {
+    CalculateSubtotals('3dparty');
+})

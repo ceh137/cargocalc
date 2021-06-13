@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-
+    <link href="style.css" rel="stylesheet" type="text/css" >
 
     <title>Title</title>
 </head>
@@ -44,7 +44,7 @@
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="inTime1">
                         <label class="form-check-label" for="inTime1">
-                            Фиксированное время
+                            Фиксированное время (+500 р.)
                         </label>
                     </div>
                     <div class="container">
@@ -100,7 +100,7 @@
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="inTime2">
                         <label class="form-check-label" for="inTime2">
-                            Фиксированное время
+                            Фиксированное время (+500 р.)
                         </label>
                     </div>
                     <div class="container">
@@ -194,7 +194,7 @@
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input check" type="checkbox" value="opt3" id="check3">
+                    <input class="form-check-input check" type="radio" name="package" value="opt3" id="check3">
                     <label class="form-check-label" for="check3" id="labelFor3">
                         Жесткая упаковка
                     </label>
@@ -206,7 +206,7 @@
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input check" type="checkbox" value="opt5" id="check5">
+                    <input class="form-check-input check" type="radio" name="package" value="opt5" id="check5">
                     <label class="form-check-label" for="check5" id="labelFor5">
                         Упаковка в паллет-борт
                     </label>
@@ -216,9 +216,14 @@
                     <label class="form-check-label" for="check6" id="labelFor6">
                         Страховка
                     </label>
+
                 </div>
+                <div class="col-sm-2 col-md-2">
 
-
+                <input id="worth" type="number"class="form-control" value="0" step="1" min="0"
+                       aria-label="Sizing example input" aria-describedby="lableworth">
+                <span class="input-group-text" id="lableworth">Ценность (Руб)</span>
+            </div>
             </div>
         </div>
 
@@ -243,53 +248,54 @@
 
                     <div class="container mt-5">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayAllSender">
+                            <input class="form-check-input PayAll" type="radio" name="PayAll" value="" id="PayAllSender">
                             <label class="form-check-label" for="PayAllSender">
                                 За все
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayTermTransferSender">
+                            <input class="form-check-input PayTermTransfer Sender" type="radio" name="PayTermTransfer" value="" id="PayTermTransferSender">
                             <label class="form-check-label" for="PayTermTransferSender">
                                 За терминальную перевозку
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayPacSender">
+                            <input class="form-check-input PayPac Sender" type="radio" name="PayPac" value="" id="PayPacSender">
                             <label class="form-check-label" for="PayPacSender">
                                 За упаковку
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayInsSender">
+                            <input class="form-check-input PayIns Sender" type="radio" name="PayIns" value="" id="PayInsSender">
                             <label class="form-check-label" for="PayInsSender">
                                 За страховку
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayFromAddressToTermSender">
+                            <input class="form-check-input PayFromAddressToTerm Sender" type="radio" name="PayFromAddressToTerm" value="" id="PayFromAddressToTermSender">
                             <label class="form-check-label" for="PayFromAddressToTermSender">
                                 За доставку от адреса до терминала
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayPRRatAddressSender">
+                            <input class="form-check-input PayPRRatAddress Sender" type="radio" name="PayPRRatAddress" value="" id="PayPRRatAddressSender">
                             <label class="form-check-label" for="PayPRRatAddressSender">
                                 За ПРР на адресе
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayFromTermToAddressSender">
+                            <input class="form-check-input PayFromTermToAddress Sender" type="radio" name="PayFromTermToAddress" value="" id="PayFromTermToAddressSender">
                             <label class="form-check-label" for="PayFromTermToAddressSender">
                                 За доставку с терминала на адрес
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayPRRtoAddressSender">
+                            <input class="form-check-input PayPRRtoAddress Sender" type="radio" name="PayPRRtoAddress" value="" id="PayPRRtoAddressSender">
                             <label class="form-check-label" for="PayPRRtoAddressSender">
                                 За ПРР на доставке на адрес
                             </label>
                         </div>
+                        <h5 id="PaymentSender"></h5>
                     </div>
                 </div>
                 <div class="col-sm-4 col-md-4">
@@ -311,53 +317,54 @@
 
                     <div class="container mt-5">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayAllReceiver">
+                            <input class="form-check-input PayAll " type="radio" name="PayAll" value="" id="PayAllReceiver">
                             <label class="form-check-label" for="PayAllReceiver">
                                 За все
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayTermTransferReceiver">
+                            <input class="form-check-input PayTermTransfer Receiver" type="radio" name="PayTermTransfer" value="" id="PayTermTransferReceiver">
                             <label class="form-check-label" for="PayTermTransferReceiver">
                                 За терминальную перевозку
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayPacReceiver">
+                            <input class="form-check-input PayPac Receiver" type="radio" name="PayPac" value="" id="PayPacReceiver">
                             <label class="form-check-label" for="PayPacReceiver">
                                 За упаковку
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayInsReceiver">
+                            <input class="form-check-input PayIns Receiver" type="radio" name="PayIns" value="" id="PayInsReceiver">
                             <label class="form-check-label" for="PayInsReceiver">
                                 За страховку
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayFromAddressToTermReceiver">
+                            <input class="form-check-input PayFromAddressToTerm Receiver" type="radio" name="PayFromAddressToTerm" value="" id="PayFromAddressToTermReceiver">
                             <label class="form-check-label" for="PayFromAddressToTermReceiver">
                                 За доставку от адреса до терминала
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayPRRatAddressReceiver">
+                            <input class="form-check-input PayPRRatAddress Receiver" type="radio" name="PayPRRatAddress" value="" id="PayPRRatAddressReceiver">
                             <label class="form-check-label" for="PayPRRatAddressReceiver">
                                 За ПРР на адресе
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayFromTermToAddressReceiver">
+                            <input class="form-check-input PayFromTermToAddress Receiver" type="radio" name="PayFromTermToAddress" value="" id="PayFromTermToAddressReceiver">
                             <label class="form-check-label" for="PayFromTermToAddressReceiver">
                                 За доставку с терминала на адрес
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayPRRtoAddressReceiver">
+                            <input class="form-check-input PayPRRtoAddress Receiver" type="radio" name="PayPRRtoAddress" value="" id="PayPRRtoAddressReceiver">
                             <label class="form-check-label" for="PayPRRtoAddressReceiver">
                                 За ПРР на доставке на адрес
                             </label>
                         </div>
+                        <h5 id="PaymentReceiver"></h5>
                     </div>
 
                 </div>
@@ -380,53 +387,54 @@
 
                     <div class="container mt-5">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayAll3dparty">
+                            <input class="form-check-input PayAll " type="radio" name="PayAll" value="" id="PayAll3dparty">
                             <label class="form-check-label" for="PayAll3dparty">
                                 За все
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayTermTransfer3dparty">
+                            <input class="form-check-input PayTermTransfer 3dparty" type="radio" name="PayTermTransfer" value="" id="PayTermTransfer3dparty">
                             <label class="form-check-label" for="PayTermTransfer3dparty">
                                 За терминальную перевозку
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayPac3dparty">
+                            <input class="form-check-input PayPac 3dparty" type="radio" name="PayPac" value="" id="PayPac3dparty">
                             <label class="form-check-label" for="PayPac3dparty">
                                 За упаковку
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayIns3dparty">
+                            <input class="form-check-input PayIns 3dparty" type="radio" name="PayIns" value="" id="PayIns3dparty">
                             <label class="form-check-label" for="PayIns3dparty">
                                 За страховку
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayFromAddressToTerm3dparty">
+                            <input class="form-check-input PayFromAddressToTerm 3dparty" type="radio" name="PayFromAddressToTerm" value="" id="PayFromAddressToTerm3dparty">
                             <label class="form-check-label" for="PayFromAddressToTerm3dparty">
                                 За доставку от адреса до терминала
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayPRRatAddress3dparty">
+                            <input class="form-check-input PayPRRatAddress 3dparty" type="radio" name="PayPRRatAddress" value="" id="PayPRRatAddress3dparty">
                             <label class="form-check-label" for="PayPRRatAddress3dparty">
                                 За ПРР на адресе
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayFromTermToAddress3dparty">
+                            <input class="form-check-input PayFromTermToAddress 3dparty" type="radio" name="PayFromTermToAddress" value="" id="PayFromTermToAddress3dparty">
                             <label class="form-check-label" for="PayFromTermToAddress3dparty">
                                 За доставку с терминала на адрес
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="PayPRRtoAddress3dparty">
+                            <input class="form-check-input PayPRRtoAddress 3dparty" type="radio" name="PayPRRtoAddress" value="" id="PayPRRtoAddress3dparty">
                             <label class="form-check-label" for="PayPRRtoAddress3dparty">
                                 За ПРР на доставке на адрес
                             </label>
                         </div>
+                        <h5 id="Payment3dparty"></h5>
                     </div>
 
                 </div>
@@ -436,6 +444,10 @@
             <input type="submit" class="btn btn-primary my-5">
         </div>
     </form>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="ahunter-suggest.js"></script>
+    <script SRC="props.js"></script>
+
     <script src="arrays.js"></script>
     <script src="timer.js"></script>
     <script src="sendform.js"></script>

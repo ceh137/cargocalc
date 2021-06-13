@@ -83,9 +83,16 @@ function timer() {
         let time1 = new Date(year1, month1, date1, hour1, minutes1);
         let time2 = new Date(year, month, date, 21, 00, 00);
         different = time2 - time1;
+        let days = Math.floor(different/86400000);
         let hours = Math.floor((different % 86400000) / 3600000);
         let minutes = Math.round(((different % 86400000) % 3600000) / 60000);
-        let result = hours + ':' + minutes;
+        let result = '';
+        if (days >= 1) {
+            result = days+' день  '+hours + ' часов  ' + minutes+ ' минут';
+        } else {
+            result = hours + ' часов  ' + minutes+ ' минут';
+        }
+
 
         document.getElementById('DepExpress').innerText = 'Машина выезжает через  ' + result;
 
@@ -99,9 +106,15 @@ function timer() {
         let time1 = new Date(year1, month1, date1, hour1, minutes1);
         let time2 = new Date(year, month, date, 21, 00, 00);
         different = time2 - time1;
+        let days = Math.floor(different/86400000);
         let hours = Math.floor((different % 86400000) / 3600000);
         let minutes = Math.round(((different % 86400000) % 3600000) / 60000);
-        let result = hours + ':' + minutes;
+        let result = '';
+        if (days >= 1) {
+            result = days+' день  '+hours + ' часов  ' + minutes+ ' минут';
+        } else {
+            result = hours + ' часов  ' + minutes+ ' минут';
+        }
 
         document.getElementById('DepExpress').innerText = 'Машина выезжает через  ' + result;
 

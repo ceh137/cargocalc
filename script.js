@@ -82,7 +82,21 @@ function stepChangeM() {
 }
 
 
+let packageRad = Array.apply(null,  document.getElementsByName('package'));
+packageRad.forEach(rad => {
+    let checked = false;
 
+    rad.addEventListener("mousedown", event => {
+        checked = rad.checked;
+    });
+    rad.addEventListener("click", event => {
+        rad.checked = !checked;
+        CalculatorEco();
+        CalculateExpress();
+
+
+    });
+})
 
 // Логарифмические функции, которые настраивают поведение инпутов range
 function logsliderKg(position) {
@@ -448,7 +462,7 @@ function CalculateExpress(res) {
 
 }
 
-function CalculatorEco() {
+function CalculatorEco(res) {
     let array = neededArr(false);
     let optPrices = array['price'][priceType()];
     let ADprices = array['ADprice'][priceTypeForAD()];
