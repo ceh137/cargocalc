@@ -15,11 +15,11 @@
 
 <body>
     <h1 class="text-center">Расчитайте стоимость доставки</h1>
-    <form>
+    <form action="nextpage.php" method="post">
     <div class="container">
         <div class="row">
             <div class="col-sm-5 col-md-6">
-                <select id="city1" style="max-width: 400px;" class="form-select form-select-lg mb-3"
+                <select id="city1" style="max-width: 400px;" name="city_from" class="form-select form-select-lg mb-3"
                     aria-label=".form-select-lg example">
                     <option value="Moscow" selected>Москва</option>
                     <option value="SPB">Санкт-Петербург</option>
@@ -28,7 +28,7 @@
             </div>
 
             <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
-                <select id="city2" style="max-width: 400px;" class="form-select form-select-lg mb-3"
+                <select id="city2" style="max-width: 400px;" name="city_to" class="form-select form-select-lg mb-3"
                     aria-label=".form-select-lg example">
                     <option value="SPB" selected>Санкт-Петербург</option>
                     <option value="Moscow">Москва</option>
@@ -39,7 +39,7 @@
         <div class="row">
             <div class="col-sm-6 col-md-5 col-lg-6">
                 <div class="input-group mb-3">
-                    <input id="kg" type="number" class="form-control" aria-label="Sizing example input"
+                    <input id="kg" type="number" name="kilograms" class="form-control" aria-label="Sizing example input"
                         aria-describedby="basic-addon2">
                     <span class="input-group-text" id="basic-addon2">КГ</span>
                 </div>
@@ -48,37 +48,37 @@
                 <input type="range" min='0' max="100" step="0.5" class="form-range" value="" id="kgRange">
 
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="opt1" id="check1">
+                    <input class="form-check-input" type="checkbox" value="opt1" name="options[]" id="check1">
                     <label class="form-check-label" for="check1" id="labelFor1">
                         Доставка груза на адрес
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="opt2" id="check2">
+                    <input class="form-check-input" type="checkbox" value="opt2" name="options[]" id="check2">
                     <label class="form-check-label" for="check2" id="labelFor2">
                         Забор груза на адресе
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="package" value="opt3" id="check3">
+                    <input class="form-check-input" type="radio" name="options[]" value="opt3"  id="check3">
                     <label class="form-check-label" for="check3" id="labelFor3">
                         Жесткая упаковка
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="opt4" id="check4">
+                    <input class="form-check-input" type="checkbox" value="opt4" name="options[]" id="check4">
                     <label class="form-check-label" for="check4" id="labelFor4">
                         Упаковка в стретч-пленку
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="package" value="opt5" id="check5">
+                    <input class="form-check-input" type="radio" name="options[]" value="opt5" id="check5">
                     <label class="form-check-label" for="check5" id="labelFor5">
                         Упаковка в паллет-борт
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="opt6" id="check6">
+                    <input class="form-check-input" type="checkbox" value="opt6" name="options[]" id="check6">
                     <label class="form-check-label" for="check6" id="labelFor6">
                         Страховка
                     </label>
@@ -89,7 +89,7 @@
 
             <div class="col-sm-6 col-md-5 offset-md-2 col-lg-6 offset-lg-0">
                 <div class="input-group mb-3">
-                    <input id="meters" type="number" class="form-control" value="0.01" step="0.01" min="0" max="80"
+                    <input id="meters" type="number" name="meters" class="form-control" value="0.01" step="0.01" min="0" max="80"
                         aria-label="Sizing example input" aria-describedby="basic-addon1">
                     <span class="input-group-text" id="basic-addon1">M^3</span>
                 </div>
@@ -127,7 +127,7 @@
 
 
     <script src="arrays.js"></script>
-    <script src="timer.js"></script>
+    <script src="timerforindex.js"></script>
     <script src="script.js"></script>
     <!-- Optional JavaScript; choose one of the two! -->
 

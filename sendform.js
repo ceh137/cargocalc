@@ -366,11 +366,11 @@ packageRad.forEach(rad => {
     });
 })
 kg.max = 20000;
-kg.value = 2.5;
+//kg.value = 2.5;
 kg.min = 0;
 
 meters.max = 80;
-meters.value = 0.01;
+//meters.value = 0.01;
 meters.min = 0;
 
 let allInputs = [

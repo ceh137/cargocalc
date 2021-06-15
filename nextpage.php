@@ -1,3 +1,8 @@
+
+<?php
+include 'proceed.php';
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,6 +16,7 @@
 </head>
 
 <body>
+
     <h1 class="text-center">Дата и направление перевозки</h1>
     <form>
         <div class="container">
@@ -19,20 +25,20 @@
                     <h3 class="text-center">Откуда</h3>
                     <select id="city1" style="max-width: 400px;" class="form-select form-select-lg mb-3"
                         aria-label=".form-select-lg example">
-                        <option value="Moscow" selected>Москва</option>
-                        <option value="SPB">Санкт-Петербург</option>
+                        <option value="Moscow" <?= $from_city=='Moscow' ? 'selected' : '' ?>>Москва</option>
+                        <option value="SPB" <?= $from_city=='SPB' ? 'selected' : '' ?>>Санкт-Петербург</option>
                     </select>
                     <p id="DepEco" class="text-center">erb</p>
                     <p id="DepExpress" class="text-center">bf</p>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="fromrad" id="fromAddress">
+                        <input class="form-check-input" type="radio" name="fromrad" id="fromAddress" <?=  $del_from_addr==true ? 'checked' : ''?>>
                         <label class="form-check-label" for="fromAddress">
                             От адреса
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="fromrad" id="fromTerminal" checked>
+                        <input class="form-check-input" type="radio" name="fromrad" id="fromTerminal" <?= !$del_from_addr==true ? 'checked' : '' ?>>
                         <label class="form-check-label" for="fromTerminal">
                             От терминала
                         </label>
@@ -76,20 +82,20 @@
                     <h3 class="text-center">Куда </h3>
                     <select id="city2" style="max-width: 400px;" class="form-select form-select-lg mb-3"
                         aria-label=".form-select-lg example">
-                        <option value="SPB" selected>Санкт-Петербург</option>
-                        <option value="Moscow">Москва</option>
+                        <option value="SPB" <?= $to_city=='SPB' ? 'selected' : '' ?>>Санкт-Петербург</option>
+                        <option value="Moscow" <?= $to_city=='Moscow' ? 'selected' : '' ?>>Москва</option>
                     </select>
                     <p id="arrEco" class="text-center"></p>
                     <p id="arrExpress" class="text-center"></p>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="torad" id="toAddress">
+                        <input class="form-check-input" type="radio" name="torad" id="toAddress" <?=  $del_to_addr==true ? 'checked' : ''?>>
                         <label class="form-check-label" for="toAddress">
                             До адреса
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="torad" id="toTerminal" checked>
+                        <input class="form-check-input" type="radio" name="torad" id="toTerminal"  <?=  !$del_to_addr==true ? 'checked' : ''?>>
                         <label class="form-check-label" for="toTerminal">
                             До терминала
                         </label>
@@ -123,20 +129,20 @@
                     Вес груза
                     <br>
                     <div class="input-group">
-                        <input id="kg" type="number" class="form-control" aria-label="Sizing example input"
+                        <input id="kg" type="number" class="form-control" value="<?= $kilos ?>" aria-label="Sizing example input"
                             aria-describedby="labelkg">
                         <span class="input-group-text" id="labelkg">КГ</span>
                     </div>
 
                     <label for="kgRange" class="form-label"></label>
-                    <input type="range" min='0' max="100" step="0.5" class="form-range" value="100" id="kgRange">
+                    <input type="range" min='0' max="100" step="0.5" class="form-range"  id="kgRange">
 
                 </div>
                 <div class="col-sm-2 col-md-2">
                     Обьем груза
                     <br>
                     <div class="input-group">
-                        <input id="meters" type="number" class="form-control" value="0.01" step="0.01" min="0" max="80"
+                        <input id="meters" type="number" class="form-control" value="<?= $meters ?>" step="0.01" min="0" max="80"
                             aria-label="Sizing example input" aria-describedby="labelmeters">
                         <span class="input-group-text" id="labelmeters">M^3</span>
                     </div>
@@ -182,37 +188,37 @@
                 </div>
 
                 <div class="form-check">
-                    <input class="form-check-input check" type="checkbox" value="opt1" id="check1">
+                    <input class="form-check-input check" type="checkbox" value="opt1" id="check1" <?=  $del_to_addr==true ? 'checked' : ''?>>
                     <label class="form-check-label" for="check1" id="labelFor1">
                         Доставка груза на адрес
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input check" type="checkbox" value="opt2" id="check2">
+                    <input class="form-check-input check" type="checkbox" value="opt2" id="check2" <?=  $del_from_addr==true ? 'checked' : ''?>>
                     <label class="form-check-label" for="check2" id="labelFor2">
                         Забор груза на адресе
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input check" type="radio" name="package" value="opt3" id="check3">
+                    <input class="form-check-input check" type="radio" name="package" value="opt3" id="check3" <?=  $rigid==true ? 'checked' : ''?>>
                     <label class="form-check-label" for="check3" id="labelFor3">
                         Жесткая упаковка
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input check" type="checkbox" value="opt4" id="check4">
+                    <input class="form-check-input check" type="checkbox" value="opt4" id="check4" <?=  $stretch==true ? 'checked' : ''?>>
                     <label class="form-check-label" for="check4" id="labelFor4">
                         Упаковка в стретч-пленку
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input check" type="radio" name="package" value="opt5" id="check5">
+                    <input class="form-check-input check" type="radio" name="package" value="opt5" id="check5" <?=  $bort==true ? 'checked' : ''?>>
                     <label class="form-check-label" for="check5" id="labelFor5">
                         Упаковка в паллет-борт
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input check" type="checkbox" value="opt6" id="check6">
+                    <input class="form-check-input check" type="checkbox" value="opt6" id="check6" <?=  $insurance==true ? 'checked' : ''?>>
                     <label class="form-check-label" for="check6" id="labelFor6">
                         Страховка
                     </label>
