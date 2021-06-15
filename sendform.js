@@ -53,7 +53,20 @@ let checkboxes = document.getElementsByClassName('check');
 // Лейблы
 let inTime1 = document.getElementById('inTime1');
 let inTime2 = document.getElementById('inTime2');
-
+inTime1.addEventListener('input', () => {
+    if (express.checked == true) {
+        CalculateExpress('total');
+    } else if (econom.checked == true) {
+        CalculatorEco('total')
+    }
+})
+inTime2.addEventListener('input', () => {
+    if (express.checked == true) {
+        CalculateExpress('total');
+    } else if (econom.checked == true) {
+        CalculatorEco('total')
+    }
+})
 let changeCitiesbtn = document.getElementById("changeCities");
 //
 let PayAll = Array.apply(null,  document.getElementsByClassName('PayAll'));
@@ -70,13 +83,31 @@ let Receiver = document.getElementsByClassName('Receiver');
 let ThirdParty = document.getElementsByClassName('3dparty');
 let DeliveryFrom = Array.apply(null, document.getElementsByName('fromrad'));
 let DeliveryTo = Array.apply(null, document.getElementsByName('torad'));
+let AllPaymentChecks = [
+    PayTermTransfer,
+    PayAll,
+    PayPac,
+    PayIns,
+    PayPRRatAddress,
+    PayPRRtoAddress,
+    PayFromAddressToTerm,
+    PayFromTermToAddress
+]
+let txtPayAll ='За все';
+let txtPayTermTransfer = 'За терминальную перевозку';
+let txtPayPac = 'За упаковку';
+let txtPayIns = 'За страховку';
+let txtPayFromAddressToTerm = 'За доставку от адреса до терминала';
+let txtPayPRRatAddress = 'За ПРР на адресе забора груза';
+let txtPayFromTermToAddress = 'За доставку от терминала до адреса';
+let txtPayPRRtoAddress = 'За ПРР на адресе доставки';
 
 DeliveryFrom.forEach(Btn => {
     Btn.addEventListener('input', () => {
         if (Btn == document.getElementById('fromAddress')) {
             if (Btn.checked == true) {
                 document.getElementById('addressFrom').disabled = false;
-                document.getElementById('check1').checked = true;
+                document.getElementById('check2').checked = true;
                 if (express.checked == true) {
                     CalculateExpress('total');
                 } else if (econom.checked == true) {
@@ -85,7 +116,7 @@ DeliveryFrom.forEach(Btn => {
 
             } else {
                 document.getElementById('addressFrom').disabled = true;
-                document.getElementById('check1').checked = false;
+                document.getElementById('check2').checked = false;
                 if (express.checked == true) {
                     CalculateExpress('total');
                 } else if (econom.checked == true) {
@@ -95,7 +126,7 @@ DeliveryFrom.forEach(Btn => {
             }
         } else {
             document.getElementById('addressFrom').disabled = true;
-            document.getElementById('check1').checked = false;
+            document.getElementById('check2').checked = false;
             if (express.checked == true) {
                 CalculateExpress('total');
             } else if (econom.checked == true) {
@@ -143,11 +174,11 @@ if (document.getElementById('toAddress').checked == true) {
 }
 
 DeliveryTo.forEach(Btn => {
-    Btn.addEventListener('input', () => {
+    Btn.addEventListener('change', () => {
         if (Btn == document.getElementById('toAddress')) {
             if (Btn.checked == true) {
                 document.getElementById('addressTo').disabled = false;
-                document.getElementById('check2').checked = true;
+                document.getElementById('check1').checked = true;
                 if (express.checked == true) {
                     CalculateExpress('total');
                 } else if (econom.checked == true) {
@@ -155,7 +186,7 @@ DeliveryTo.forEach(Btn => {
                 }
             } else {
                 document.getElementById('addressTo').disabled = true;
-                document.getElementById('check2').checked = false;
+                document.getElementById('check1').checked = false;
                 if (express.checked == true) {
                     CalculateExpress('total');
                 } else if (econom.checked == true) {
@@ -164,7 +195,7 @@ DeliveryTo.forEach(Btn => {
             }
         } else {
             document.getElementById('addressTo').disabled = true;
-            document.getElementById('check2').checked = false;
+            document.getElementById('check1').checked = false;
             if (express.checked == true) {
                 CalculateExpress('total');
             } else if (econom.checked == true) {
@@ -361,6 +392,19 @@ let allInputs = [
 ]
 
 for (let check of checkboxes) {
+    if (check.value == 'opt1') {
+        check.addEventListener('input', () => {
+            if (check.checked==true) {
+                document.getElementById('toAddress').checked = true;
+                document.getElementById('addressTo').disabled = true;
+            } else if (check.checked == false) {
+                document.getElementById('toAddress').checked = false;
+                document.getElementById('addressTo').disabled = false;
+            }
+
+        })
+
+    }
     allInputs.push(check);
 }
 
@@ -644,7 +688,7 @@ function fixCities() {
     }
 }
 function getSelectedCheckboxes() {
-    let checkboxes = document.getElementsByClassName('form-check-input');
+    let checkboxes = document.getElementsByClassName('check');
     let selected = [];
     for (let i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked) {
@@ -797,13 +841,18 @@ function CalculateExpress(res) {
         }
     }
     for (let check of PayTermTransfer) {
-        check.value = price;
+        check.value = Math.round(price);
+        check.labels.forEach(label => {
+            label.innerText = 'Зa терминальную доставку ' + Math.round(price) + ' руб.';
+        })
     }
 
 
 
     // Options
-
+    let rigidPacPrice = 0;
+    let stretchPacPrice = 0;
+    let bortPrice = 0;
     for (let option of options) {
         switch (option) {
             case 'opt8':
@@ -812,6 +861,9 @@ function CalculateExpress(res) {
                 price += PRRtoAdressPrice;
                 for (let check of PayPRRtoAddress) {
                     check.setAttribute('value', PRRtoAdressPrice);
+                    check.labels.forEach(label => {
+                        label.innerText = 'Зa ПРР на адресе доставки ' + PRRtoAdressPrice + ' руб.';
+                    })
                 }
                 break;
             case "opt7":
@@ -820,6 +872,9 @@ function CalculateExpress(res) {
                 price += PRRfromAdressPrice;
                 for (let check of PayPRRatAddress) {
                     check.setAttribute('value', PRRfromAdressPrice);
+                    check.labels.forEach(label => {
+                        label.innerText = 'Зa ПРР на адресе забора груза ' + PRRfromAdressPrice + ' руб.';
+                    })
                 }
                 break;
             case "opt6":
@@ -848,11 +903,14 @@ function CalculateExpress(res) {
                 }
                 for (let check of PayIns) {
                     check.setAttribute('value', insurance);
+                    check.labels.forEach(label => {
+                        label.innerText = 'Зa страховку ' + insurance+ ' руб.';
+                    })
                 }
                 //insuranceLabel.innerText = "Страховка (" + insurance.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt5":
-                let bortPrice = 0;
+
                 if (priceType() == "minP" || priceType() == "single" || priceType() == "docs") {
                     bortPrice = +optPrices['bort'];
                 } else {
@@ -870,7 +928,7 @@ function CalculateExpress(res) {
                 //bortLabel.innerText = "Упаковка в паллет-борт (" + bortPrice.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt4":
-                let stretchPacPrice = 0;
+
                 if (priceType() == "minP" || priceType() == "single" || priceType() == "docs") {
                     stretchPacPrice = +optPrices['stretchPac'];
                 } else {
@@ -882,13 +940,14 @@ function CalculateExpress(res) {
                     }
                 }
                 price += stretchPacPrice;
+
                 for (let check of PayPac) {
                     check.setAttribute('value', stretchPacPrice);
                 }
                 //stretchPacLabel.innerText = "Упаковка в стретч-пленку (" + stretchPacPrice.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt3":
-                let rigidPacPrice = 0;
+
                 if (priceType() == "minP" || priceType() == "single" || priceType() == "docs") {
                     rigidPacPrice = +optPrices['rigidPac'];
                 } else {
@@ -899,6 +958,7 @@ function CalculateExpress(res) {
                         rigidPacPrice = +optPrices['rigidPac'] * volume;
                     }
                 }
+
                 for (let check of PayPac) {
                     check.setAttribute('value', rigidPacPrice);
                 }
@@ -1120,11 +1180,25 @@ function CalculateExpress(res) {
         result.innerText = 'Стоимость ЭКСПРЕСС: ' + price.toLocaleString('ru-RU') + ' руб.';
     } else if (res == 'total') {
         let result = document.getElementById("total");
+        let pacPrice = 0;
+        console.log(options.includes('opt3'));
+        console.log(options.includes('opt5'));
+        if ((options.includes('opt3') || options.includes('opt5')) && options.includes('opt4')) {
 
-        for (let check of PayAll) {
-            check.value = price;
+            if (options.includes('opt3') && options.includes('opt4')) {
+                pacPrice = rigidPacPrice + stretchPacPrice;
+            } else if (options.includes('opt5') && options.includes('opt4')) {
+                pacPrice = stretchPacPrice + bortPrice;
+            }
+            for (let check of PayPac) {
+                check.setAttribute('value', Math.round(pacPrice));
+            }
+
         }
-        result.innerText = 'ИТОГО: ' + price.toLocaleString('ru-RU') + ' руб.';
+        for (let check of PayAll) {
+            check.value = Math.round(price);
+        }
+        result.innerText = 'ИТОГО: ' + Math.round(price).toLocaleString('ru-RU') + ' руб.';
     }
 
 
@@ -1180,15 +1254,39 @@ function CalculatorEco(res) {
         }
     }
     for (let check of PayTermTransfer) {
-        check.value = price;
+        check.value = Math.round(price);
     }
 
 
 
     // Options
-
+    let rigidPacPrice = 0;
+    let stretchPacPrice = 0;
+    let bortPrice = 0;
     for (let option of options) {
         switch (option) {
+            case 'opt8':
+                let PRRtoAdressPrice = PRRtoAddress * weight/20;
+                PRRtoAdressPrice = Math.ceil(PRRtoAdressPrice/PRRtoAddress) * PRRtoAddress;
+                price += PRRtoAdressPrice;
+                for (let check of PayPRRtoAddress) {
+                    check.setAttribute('value', PRRtoAdressPrice);
+                    check.labels.forEach(label => {
+                        label.innerText = 'Зa ПРР на адресе доставки ' + PRRtoAdressPrice + ' руб.';
+                    })
+                }
+                break;
+            case "opt7":
+                let PRRfromAdressPrice = PRRfromAddress * weight/20;
+                PRRfromAdressPrice = Math.ceil(PRRfromAdressPrice/PRRfromAddress) * PRRfromAddress;
+                price += PRRfromAdressPrice;
+                for (let check of PayPRRatAddress) {
+                    check.setAttribute('value', PRRfromAdressPrice);
+                    check.labels.forEach(label => {
+                        label.innerText = 'Зa ПРР на адресе забора груза ' + PRRfromAdressPrice + ' руб.';
+                    })
+                }
+                break;
             case "opt6":
                 let insurance = 0
                 if (priceType() == "minP" || priceType() == "single" || priceType() == "docs") {
@@ -1218,7 +1316,7 @@ function CalculatorEco(res) {
                 insuranceLabel.innerText = "Страховка (" + insurance.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt5":
-                let bortPrice = 0;
+
                 if (priceType() == "minP" || priceType() == "single" || priceType() == "docs") {
                     bortPrice = +optPrices['bort'];
                 } else {
@@ -1236,7 +1334,7 @@ function CalculatorEco(res) {
                 bortLabel.innerText = "Упаковка в паллет-борт (" + bortPrice.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt4":
-                let stretchPacPrice = 0;
+
                 if (priceType() == "minP" || priceType() == "single" || priceType() == "docs") {
                     stretchPacPrice = +optPrices['stretchPac'];
                 } else {
@@ -1254,7 +1352,7 @@ function CalculatorEco(res) {
                 stretchPacLabel.innerText = "Упаковка в стретч-пленку (" + stretchPacPrice.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt3":
-                let rigidPacPrice = 0;
+
                 if (priceType() == "minP" || priceType() == "single" || priceType() == "docs") {
                     rigidPacPrice = +optPrices['rigidPac'];
                 } else {
@@ -1265,6 +1363,7 @@ function CalculatorEco(res) {
                         rigidPacPrice = +optPrices['rigidPac'] * volume;
                     }
                 }
+
                 price += rigidPacPrice;
                 for (let check of PayPac) {
                     check.setAttribute('value', rigidPacPrice);
@@ -1343,7 +1442,18 @@ function CalculatorEco(res) {
     }
 
     for (let abstractOption of abstractOptions) {
+
         switch (abstractOption) {
+            case'opt8':
+                let PRRtoAdressPrice = PRRtoAddress * weight/20;
+                PRRtoAdressPrice = Math.ceil(PRRtoAdressPrice/PRRtoAddress) * PRRtoAddress;
+                PRRtoLabel.innerText = "ПРР на адресе забора груза (" + PRRtoAdressPrice.toLocaleString('ru-Ru') + " руб.)";
+                break;
+            case "opt7":
+                let PRRfromAdressPrice = PRRfromAddress * weight/20;
+                PRRfromAdressPrice = Math.ceil(PRRfromAdressPrice/PRRfromAddress) * PRRfromAddress;
+                PRRfromLabel.innerText = "ПРР на адресе забора груза (" + PRRfromAdressPrice.toLocaleString('ru-Ru') + " руб.)";
+                break;
             case "opt6":
                 let insurance = 0
                 if (priceType() == "minP" || priceType() == "single" || priceType() == "docs") {
@@ -1365,7 +1475,7 @@ function CalculatorEco(res) {
                 insuranceLabel.innerText = "Страховка (" + insurance.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt5":
-                let bortPrice = 0;
+
                 if (priceType() == "minP" || priceType() == "single" || priceType() == "docs") {
                     bortPrice = +optPrices['bort'];
                 } else {
@@ -1471,7 +1581,21 @@ function CalculatorEco(res) {
         result.innerText = 'Стоимость ЭКСПРЕСС: ' + price.toLocaleString('ru-RU') + ' руб.';
     } else if (res == 'total') {
         let result = document.getElementById("total");
+        let pacPrice = 0;
+        console.log(options.includes('opt3'));
+        console.log(options.includes('opt5'));
+        if ((options.includes('opt3') || options.includes('opt5')) && options.includes('opt4')) {
 
+            if (options.includes('opt3') && options.includes('opt4')) {
+                pacPrice = rigidPacPrice + stretchPacPrice;
+            } else if (options.includes('opt5') && options.includes('opt4')) {
+                pacPrice = stretchPacPrice + bortPrice;
+            }
+            for (let check of PayPac) {
+                check.setAttribute('value', Math.round(pacPrice));
+            }
+
+        }
         for (let check of PayAll) {
             check.value = price;
         }
@@ -1540,6 +1664,7 @@ function CalculateSubtotals(who) {
         console.log(subtotal);
         document.getElementById('Payment3dparty').innerText = 'Оплата: ' + subtotal.toLocaleString('ru-RU');
    //}
+
 }
 
 
@@ -1549,7 +1674,39 @@ if (express.checked == true) {
     CalculatorEco('total')
 }
 
+let txt = ''
+AllPaymentChecks.forEach(Checks => {
+    Checks.forEach(check => {
+        if (PayAll.includes(check)) {
+            txt = txtPayAll;
+        } else if (PayPac.includes(check)) {
+            txt = txtPayPac;
+        } else if (PayIns.includes(check)) {
+            txt = txtPayIns;
+        } else if (PayTermTransfer.includes(check)) {
+            txt = txtPayTermTransfer;
+        } else if (PayFromTermToAddress.includes(check)) {
+            txt = txtPayFromTermToAddress;
+        } else if (PayFromAddressToTerm.includes(check)) {
+            txt = txtPayFromAddressToTerm;
+        } else if (PayPRRtoAddress.includes(check)) {
+            txt = txtPayPRRtoAddress;
+        } else if (PayPRRatAddress.includes(check)) {
+            txt = txtPayPRRatAddress;
+        }
 
+        check.labels.forEach(label => {
+            //txt = label.innerText;
+            if (check.value == '') {
+                label.innerText = txt + '  0  руб';
+            } else {
+
+                label.innerText = txt + '  ' + check.value + ' руб';
+            }
+
+        })
+    })
+})
 
 
 // Массив range инпутов (ползунков)
@@ -1605,6 +1762,7 @@ longest.addEventListener('input', () => {
     }
 })
 
+
 // Синхронизация range и числовых инпутов
 for (let input of valInputs) {
     input.addEventListener('input', () => {
@@ -1646,6 +1804,37 @@ for (let inp of allInputs) {
             CalculatorEco('total')
         }
         CalculateSubtotals('sender');
+        AllPaymentChecks.forEach(Checks => {
+            Checks.forEach(check => {
+                if (PayAll.includes(check)) {
+                    txt = txtPayAll;
+                } else if (PayPac.includes(check)) {
+                    txt = txtPayPac;
+                } else if (PayIns.includes(check)) {
+                    txt = txtPayIns;
+                } else if (PayTermTransfer.includes(check)) {
+                    txt = txtPayTermTransfer;
+                } else if (PayFromTermToAddress.includes(check)) {
+                    txt = txtPayFromTermToAddress;
+                } else if (PayFromAddressToTerm.includes(check)) {
+                    txt = txtPayFromAddressToTerm;
+                } else if (PayPRRtoAddress.includes(check)) {
+                    txt = txtPayPRRtoAddress;
+                } else if (PayPRRatAddress.includes(check)) {
+                    txt = txtPayPRRatAddress;
+                }
+
+                check.labels.forEach(label => {
+                    //txt = label.innerText;
+                    if (check.value == '') {
+                        label.innerText = txt + '  0  руб';
+                    } else {
+                        label.innerText = txt + '  ' + check.value + ' руб';
+                    }
+
+                })
+            })
+        })
     })
 }
 

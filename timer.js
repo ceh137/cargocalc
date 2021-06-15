@@ -451,7 +451,57 @@ function dateManage() {
     document.getElementById('dateFrom').max = y + '-' + m2 + '-' + date1;
     document.getElementById('dateTo').max = y + '-' + m2 + '-' + date1;
 }
-function timeManage() {
+function timeManage(count) {
+    let difference = 0;
+    if (inTime1.checked == true || inTime2.checked == true) {
+        difference = 2;
+    } else  {
+        difference = 4;
+    }
+
+
+    if (count == 1) {
+
+        let val1 = document.getElementById('Time1').value;
+        let arr1 = val1.split(':');
+
+        let h1 = parseInt(arr1[0]) + difference;
+        let m1 = arr1[1];
+        if (h1 >= 24) {
+            h1 = h1 % 24;
+        }
+        if (h1<10) {
+            h1 = '0'+h1;
+        }
+        document.getElementById('Time2').value = h1+':'+m1;
+    } else {
+        let val2 = document.getElementById('Intime3').value;
+        let arr2 = val2.split(':');
+
+        let h2 = parseInt(arr2[0]) + difference;
+        let m2 = arr2[1];
+        if (h2 >= 24) {
+            h2 = h2 % 24;
+
+        }
+        if (h2<10) {
+            h2 = '0'+h2;
+        }
+
+        document.getElementById('Intime4').value = h2+':'+m2;
+    }
 
 }
 dateManage();
+document.getElementById('Time1').addEventListener('input', () => {
+    timeManage(1);
+})
+document.getElementById('Intime3').addEventListener('input', () => {
+    timeManage(2);
+})
+inTime1.addEventListener('input', () => {
+    timeManage(1);
+})
+inTime2.addEventListener('input', () => {
+    timeManage(2);
+})
