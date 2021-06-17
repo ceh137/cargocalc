@@ -18,12 +18,12 @@ include 'proceed.php';
 <body>
 
     <h1 class="text-center">Дата и направление перевозки</h1>
-    <form>
+    <form action="sendinfo.php" method="post" id="form">
         <div class="container">
             <div class="row">
                 <div class="col">
                     <h3 class="text-center">Откуда</h3>
-                    <select id="city1" style="max-width: 400px;" class="form-select form-select-lg mb-3"
+                    <select id="city1" style="max-width: 400px;" name="from_city" class="form-select form-select-lg mb-3"
                         aria-label=".form-select-lg example">
                         <option value="Moscow" <?= $from_city=='Moscow' ? 'selected' : '' ?>>Москва</option>
                         <option value="SPB" <?= $from_city=='SPB' ? 'selected' : '' ?>>Санкт-Петербург</option>
@@ -32,33 +32,33 @@ include 'proceed.php';
                     <p id="DepExpress" class="text-center">bf</p>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="fromrad" id="fromAddress" <?=  $del_from_addr==true ? 'checked' : ''?>>
+                        <input class="form-check-input" type="radio" name="fromrad" value="from_address_radio" id="fromAddress" <?=  $del_from_addr==true ? 'checked' : ''?>>
                         <label class="form-check-label" for="fromAddress">
                             От адреса
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="fromrad" id="fromTerminal" <?= !$del_from_addr==true ? 'checked' : '' ?>>
+                        <input class="form-check-input" type="radio" name="fromrad" value="from_terminal_radio" id="fromTerminal" <?= !$del_from_addr==true ? 'checked' : '' ?>>
                         <label class="form-check-label" for="fromTerminal">
                             От терминала
                         </label>
                     </div>
-                    <input class="form-control my-2" id="addressFrom" type="text" placeholder="Адрес"
+                    <input class="form-control my-2" id="addressFrom" type="text" required name="address_from" placeholder="Адрес"
                         aria-label="адрес">
-                    <input class="form-control" id="dateFrom" type="date" placeholder="Дата" aria-label="адрес">
+                    <input class="form-control" id="dateFrom" type="date" placeholder="Дата" name="date_from" aria-label="адрес">
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="inTime1">
+                        <input class="form-check-input" type="checkbox" name="fixed_time1" value="" id="inTime1">
                         <label class="form-check-label" for="inTime1">
                             Фиксированное время +\- 2ч (+500 р.)
                         </label>
                     </div>
                     <div class="container">
                         От
-                        <div class="col"><input class="form-control my-2" id="Time1" type="time" placeholder="time">
+                        <div class="col"><input class="form-control my-2" id="Time1" name="time1_from" required type="time" placeholder="time">
                         </div>
                         До
-                        <div class="col"><input class="form-control my-2" id="Time2" type="time" placeholder="time">
+                        <div class="col"><input class="form-control my-2" id="Time2" name="time1_until" type="time" placeholder="time">
                         </div>
                     </div>
                 </div>
@@ -66,13 +66,13 @@ include 'proceed.php';
                     <button type="button" id="changeCities" class="btn btn-warning mt-5">Поменять города
                         местами</button>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="rad" id="Ecorad">
+                        <input class="form-check-input" type="radio" name="rad" value="econom" id="Ecorad">
                         <label class="form-check-label" for="Ecorad">
                             ЭКОНОМ
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="rad" id="Expressrad" checked>
+                        <input class="form-check-input" type="radio" name="rad" value="express" id="Expressrad" checked>
                         <label class="form-check-label" for="Expressrad">
                             ЭКСПРЕСС
                         </label>
@@ -80,7 +80,7 @@ include 'proceed.php';
                 </div>
                 <div class="col">
                     <h3 class="text-center">Куда </h3>
-                    <select id="city2" style="max-width: 400px;" class="form-select form-select-lg mb-3"
+                    <select id="city2" style="max-width: 400px;" name="to_city" class="form-select form-select-lg mb-3"
                         aria-label=".form-select-lg example">
                         <option value="SPB" <?= $to_city=='SPB' ? 'selected' : '' ?>>Санкт-Петербург</option>
                         <option value="Moscow" <?= $to_city=='Moscow' ? 'selected' : '' ?>>Москва</option>
@@ -89,32 +89,32 @@ include 'proceed.php';
                     <p id="arrExpress" class="text-center"></p>
 
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="torad" id="toAddress" <?=  $del_to_addr==true ? 'checked' : ''?>>
+                        <input class="form-check-input" type="radio" name="torad" value="to_address_radio" id="toAddress" <?=  $del_to_addr==true ? 'checked' : ''?>>
                         <label class="form-check-label" for="toAddress">
                             До адреса
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="torad" id="toTerminal"  <?=  !$del_to_addr==true ? 'checked' : ''?>>
+                        <input class="form-check-input" type="radio" name="torad" id="toTerminal" value="to_terminal_radio"  <?=  !$del_to_addr==true ? 'checked' : ''?>>
                         <label class="form-check-label" for="toTerminal">
                             До терминала
                         </label>
                     </div>
-                    <input class="form-control my-2" id="addressTo" type="text" placeholder="Адрес" aria-label="адрес">
+                    <input class="form-control my-2" id="addressTo" type="text" name="address_to" placeholder="Адрес" aria-label="адрес">
                     <input class="form-control" id="dateTo" type="date" placeholder="Дата" aria-label="адрес">
 
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="inTime2">
+                        <input class="form-check-input" type="checkbox" value="fixed_time2" id="inTime2">
                         <label class="form-check-label" for="inTime2">
                             Фиксированное время +\- 2ч (+500 р.)
                         </label>
                     </div>
                     <div class="container">
                         От
-                        <div class="col"><input class="form-control my-2" id="Intime3" type="time" step="1800" placeholder="time">
+                        <div class="col"><input class="form-control my-2" name="time2_from" id="Intime3" required type="time"  placeholder="time">
                         </div>
                         До
-                        <div class="col"><input class="form-control my-2" id="Intime4" type="time" step="1800" placeholder="time">
+                        <div class="col"><input class="form-control my-2" id="Intime4" name="time2_until" type="time" placeholder="time">
                         </div>
                     </div>
                 </div>
@@ -129,7 +129,7 @@ include 'proceed.php';
                     Вес груза
                     <br>
                     <div class="input-group">
-                        <input id="kg" type="number" class="form-control" value="<?= $kilos ?>" aria-label="Sizing example input"
+                        <input id="kg" type="number" class="form-control" name="kilos" value="<?= $kilos ?>" aria-label="Sizing example input"
                             aria-describedby="labelkg">
                         <span class="input-group-text" id="labelkg">КГ</span>
                     </div>
@@ -142,7 +142,7 @@ include 'proceed.php';
                     Обьем груза
                     <br>
                     <div class="input-group">
-                        <input id="meters" type="number" class="form-control" value="<?= $meters ?>" step="0.01" min="0" max="80"
+                        <input id="meters" type="number" class="form-control" name="meters" value="<?= $meters ?>" step="0.01" min="0" max="80"
                             aria-label="Sizing example input" aria-describedby="labelmeters">
                         <span class="input-group-text" id="labelmeters">M^3</span>
                     </div>
@@ -155,7 +155,7 @@ include 'proceed.php';
                     <br>
                     <div class="input-group">
 
-                        <input id="pieces" type="number" class="form-control" value="1" step="1" min="0" max="50"
+                        <input id="pieces" type="number" class="form-control" name="pieces" value="1" step="1" min="0" max="50"
                             aria-label="Sizing example input" aria-describedby="labelpieces">
                         <span class="input-group-text" id="labelpieces">ШТ</span>
                     </div>
@@ -167,7 +167,7 @@ include 'proceed.php';
                     Самое тяжелое место <br>
                     <div class="input-group">
 
-                        <input id="heaviest" type="number" class="form-control" value="5" step="1" min="0"
+                        <input id="heaviest" type="number" class="form-control" name="heaviest" value="5" step="1" min="0"
                             max="1000" aria-label="Sizing example input" aria-describedby="lableheaviest">
                         <span class="input-group-text" id="lableheaviest">КГ</span>
                     </div>
@@ -178,7 +178,7 @@ include 'proceed.php';
                 <div class="col-sm-2 col-md-2">
                     Самое длинное <br>
                     <div class="input-group">
-                        <input id="longest" type="number" class="form-control" value="10" step="1" min="0" max="300"
+                        <input id="longest" type="number" class="form-control" name="longest" value="10" step="1" min="0" max="300"
                             aria-label="Sizing example input" aria-describedby="basic-addon2">
                         <span class="input-group-text" id="basic-addon2">СМ</span>
                     </div>
@@ -188,51 +188,51 @@ include 'proceed.php';
                 </div>
 
                 <div class="form-check">
-                    <input class="form-check-input check" type="checkbox" value="opt1" id="check1" <?=  $del_to_addr==true ? 'checked' : ''?>>
+                    <input class="form-check-input check" type="checkbox" name="options[]" value="opt1" id="check1" <?=  $del_to_addr==true ? 'checked' : ''?>>
                     <label class="form-check-label" for="check1" id="labelFor1">
                         Доставка груза на адрес
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input check" type="checkbox" value="opt2" id="check2" <?=  $del_from_addr==true ? 'checked' : ''?>>
+                    <input class="form-check-input check" type="checkbox" value="opt2" name="options[]" id="check2" <?=  $del_from_addr==true ? 'checked' : ''?>>
                     <label class="form-check-label" for="check2" id="labelFor2">
                         Забор груза на адресе
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input check" type="radio" name="package" value="opt3" id="check3" <?=  $rigid==true ? 'checked' : ''?>>
+                    <input class="form-check-input check package" type="radio" name="options[]" value="opt3" id="check3" <?=  $rigid==true ? 'checked' : ''?>>
                     <label class="form-check-label" for="check3" id="labelFor3">
                         Жесткая упаковка
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input check" type="checkbox" value="opt4" id="check4" <?=  $stretch==true ? 'checked' : ''?>>
+                    <input class="form-check-input check" type="checkbox" name="options[]" value='opt4' id="check4"  <?=  $stretch==true ? 'checked' : ''?>>
                     <label class="form-check-label" for="check4" id="labelFor4">
                         Упаковка в стретч-пленку
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input check" type="radio" name="package" value="opt5" id="check5" <?=  $bort==true ? 'checked' : ''?>>
+                    <input class="form-check-input check package" type="radio" name="options[]" value="opt5" id="check5" <?=  $bort==true ? 'checked' : ''?>>
                     <label class="form-check-label" for="check5" id="labelFor5">
                         Упаковка в паллет-борт
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input check" type="checkbox" value="opt6" id="check6" <?=  $insurance==true ? 'checked' : ''?>>
+                    <input class="form-check-input check" type="checkbox" name="options[]" value="opt6" id="check6" <?=  $insurance==true ? 'checked' : ''?>>
                     <label class="form-check-label" for="check6" id="labelFor6">
                         Страховка
                     </label>
 
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input check" type="checkbox" value="opt7" id="check7">
+                    <input class="form-check-input check" type="checkbox" name="options[]" value="opt7" id="check7">
                     <label class="form-check-label" for="check7" id="labelFor7">
                         ПРР на адресе забора груза
                     </label>
 
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input check" type="checkbox" value="opt8" id="check8">
+                    <input class="form-check-input check" type="checkbox" name="options[]" value="opt8" id="check8">
                     <label class="form-check-label" for="check8" id="labelFor8">
                         ПРР на адресе доставки груза
                     </label>
@@ -240,7 +240,7 @@ include 'proceed.php';
                 </div>
                 <div class="col-sm-2 col-md-2">
 
-                <input id="worth" type="number"class="form-control" value="0" step="1" min="0"
+                <input id="worth" type="number"class="form-control" name="worth" value="0" step="1" min="0"
                        aria-label="Sizing example input" aria-describedby="lableworth">
                 <span class="input-group-text" id="lableworth">Ценность (Руб)</span>
             </div>
@@ -253,22 +253,22 @@ include 'proceed.php';
                     <h1>Отправитель</h1>
 
                     <label for="INNsender" class="form-label">ИНН, если юр. лицо</label>
-                    <input type="text" class="form-control" id="INNsender" placeholder="ИНН">
+                    <input type="text" class="form-control" name="INNsender" id="INNsender" placeholder="ИНН">
 
                     <label for="FIOsender" class="form-label">ФИО</label>
-                    <input type="text" class="form-control" id="FIOsender" placeholder="ФИО">
+                    <input type="text" class="form-control" name="FIOsender" id="FIOsender" placeholder="ФИО">
 
                     <label for="Telsender" class="form-label">Телефон</label>
-                    <input type="tel" class="form-control" id="Telsender"
+                    <input type="tel" class="form-control" name="Telsender" id="Telsender"
                         pattern="\+7\s?[\(]{0,1}9[0-9]{2}[\)]{0,1}\s?\d{3}[-]{0,1}\d{2}[-]{0,1}\d{2}"
                         placeholder="+7(___)___-__-__">
 
-                    <label for="Emailsender" class="form-label">Example label</label>
-                    <input type="email" class="form-control" id="Emailsender" placeholder="Email">
+                    <label for="Emailsender" class="form-label">Emaill</label>
+                    <input type="email" class="form-control" name="Emailsender" id="Emailsender" placeholder="Email">
 
                     <div class="container mt-5">
                         <div class="form-check">
-                            <input class="form-check-input PayAll" type="radio" name="PayAll" value="" id="PayAllSender">
+                            <input class="form-check-input PayAll" type="radio" name="PayAll[]" value="" id="PayAllSender" required>
                             <label class="form-check-label" for="PayAllSender">
                                 За все
                             </label>
@@ -337,7 +337,7 @@ include 'proceed.php';
 
                     <div class="container mt-5">
                         <div class="form-check">
-                            <input class="form-check-input PayAll " type="radio" name="PayAll" value="" id="PayAllReceiver">
+                            <input class="form-check-input PayAll " type="radio" name="PayAll[]" value="" id="PayAllReceiver">
                             <label class="form-check-label" for="PayAllReceiver">
                                 За все
                             </label>
@@ -407,7 +407,7 @@ include 'proceed.php';
 
                     <div class="container mt-5">
                         <div class="form-check">
-                            <input class="form-check-input PayAll " type="radio" name="PayAll" value="" id="PayAll3dparty">
+                            <input class="form-check-input PayAll Sender" type="radio" name="PayAll" value="" id="PayAll3dparty">
                             <label class="form-check-label PayAlllabel" for="PayAll3dparty">
                                 За все
                             </label>

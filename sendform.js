@@ -78,9 +78,9 @@ let PayPRRatAddress = Array.apply(null,  document.getElementsByClassName('PayPRR
 let PayFromTermToAddress = Array.apply(null,  document.getElementsByClassName('PayFromTermToAddress'));
 let PayPRRtoAddress = Array.apply(null,  document.getElementsByClassName('PayPRRtoAddress'));
 
-let Sender = document.getElementsByClassName('Sender');
-let Receiver = document.getElementsByClassName('Receiver');
-let ThirdParty = document.getElementsByClassName('3dparty');
+let Sender = Array.apply(null, document.getElementsByClassName('Sender'));
+let Receiver = Array.apply(null, document.getElementsByClassName('Receiver'));
+let ThirdParty = Array.apply(null, document.getElementsByClassName('3dparty'));
 let DeliveryFrom = Array.apply(null, document.getElementsByName('fromrad'));
 let DeliveryTo = Array.apply(null, document.getElementsByName('torad'));
 let AllPaymentChecks = [
@@ -102,6 +102,12 @@ let txtPayPRRatAddress = 'За ПРР на адресе забора груза'
 let txtPayFromTermToAddress = 'За доставку от терминала до адреса';
 let txtPayPRRtoAddress = 'За ПРР на адресе доставки';
 
+for (let check of checkboxes) {
+    check.addEventListener('change', () => {
+
+    })
+}
+
 DeliveryFrom.forEach(Btn => {
     Btn.addEventListener('input', () => {
         if (Btn == document.getElementById('fromAddress')) {
@@ -116,6 +122,7 @@ DeliveryFrom.forEach(Btn => {
 
             } else {
                 document.getElementById('addressFrom').disabled = true;
+                document.getElementById('fromTerminal').checked = true;
                 document.getElementById('check2').checked = false;
                 if (express.checked == true) {
                     CalculateExpress('total');
@@ -348,12 +355,19 @@ function disableRads(rad) {
     })
 }}
 
-let packageRad = Array.apply(null,  document.getElementsByName('package'));
+let packageRad = Array.apply(null,  document.getElementsByClassName('package'));
 packageRad.forEach(rad => {
     let checked = false;
 
     rad.addEventListener("mousedown", event => {
         checked = rad.checked;
+        if (express.checked == true) {
+            CalculateExpress('total');
+        } else if (econom.checked == true) {
+            CalculatorEco('total')
+        }
+
+        CalculateSubtotals();
     });
     rad.addEventListener("click", event => {
         rad.checked = !checked;
@@ -362,6 +376,7 @@ packageRad.forEach(rad => {
         } else if (econom.checked == true) {
             CalculatorEco('total')
         }
+
         CalculateSubtotals();
     });
 })
@@ -393,17 +408,30 @@ let allInputs = [
 
 for (let check of checkboxes) {
     if (check.value == 'opt1') {
-        check.addEventListener('input', () => {
+        check.addEventListener('click', () => {
             if (check.checked==true) {
                 document.getElementById('toAddress').checked = true;
-                document.getElementById('addressTo').disabled = true;
+                document.getElementById('addressTo').disabled = false;
             } else if (check.checked == false) {
                 document.getElementById('toAddress').checked = false;
-                document.getElementById('addressTo').disabled = false;
+                document.getElementById('addressTo').disabled = true;
+                document.getElementById('toTerminal').checked = true;
             }
 
         })
 
+    } else if (check.value == 'opt2') {
+        check.addEventListener('click', () => {
+            if (check.checked==true) {
+                document.getElementById('fromAddress').checked = true;
+                document.getElementById('addressFrom').disabled = false;
+            } else if (check.checked == false) {
+                document.getElementById('fromAddress').checked = false;
+                document.getElementById('addressFrom').disabled = true;
+                document.getElementById('fromTerminal').checked = true;
+            }
+
+        })
     }
     allInputs.push(check);
 }
@@ -924,6 +952,9 @@ function CalculateExpress(res) {
                 price += bortPrice;
                 for (let check of PayPac) {
                     check.setAttribute('value', bortPrice);
+                    check.labels.forEach(label => {
+                        label.innerText = 'Зa упаковку ' + bortPrice + ' руб.';
+                    })
                 }
                 //bortLabel.innerText = "Упаковка в паллет-борт (" + bortPrice.toLocaleString('ru-Ru') + " руб.)";
                 break;
@@ -943,6 +974,9 @@ function CalculateExpress(res) {
 
                 for (let check of PayPac) {
                     check.setAttribute('value', stretchPacPrice);
+                    check.labels.forEach(label => {
+                        label.innerText = 'Зa упаковку ' + stretchPacPrice + ' руб.';
+                    })
                 }
                 //stretchPacLabel.innerText = "Упаковка в стретч-пленку (" + stretchPacPrice.toLocaleString('ru-Ru') + " руб.)";
                 break;
@@ -961,6 +995,9 @@ function CalculateExpress(res) {
 
                 for (let check of PayPac) {
                     check.setAttribute('value', rigidPacPrice);
+                    check.labels.forEach(label => {
+                        label.innerText = 'Зa упаковку ' + rigidPacPrice + ' руб.';
+                    })
                 }
                 price += rigidPacPrice;
                 //rigidPacLabel.innerText = "Жесткая упаковка (" + rigidPacPrice.toLocaleString('ru-Ru') + " руб.)";
@@ -1180,11 +1217,11 @@ function CalculateExpress(res) {
         result.innerText = 'Стоимость ЭКСПРЕСС: ' + price.toLocaleString('ru-RU') + ' руб.';
     } else if (res == 'total') {
         let result = document.getElementById("total");
-        let pacPrice = 0;
+
         console.log(options.includes('opt3'));
         console.log(options.includes('opt5'));
         if ((options.includes('opt3') || options.includes('opt5')) && options.includes('opt4')) {
-
+            let pacPrice = 0;
             if (options.includes('opt3') && options.includes('opt4')) {
                 pacPrice = rigidPacPrice + stretchPacPrice;
             } else if (options.includes('opt5') && options.includes('opt4')) {
@@ -1195,6 +1232,51 @@ function CalculateExpress(res) {
             }
 
         }
+
+        if (!options.includes('opt1')) {
+            for (let check of PayFromTermToAddress) {
+                check.setAttribute('value', 0);
+            }
+        }
+        if (!options.includes('opt2')) {
+            for (let check of PayFromAddressToTerm) {
+                check.setAttribute('value', 0);
+            }
+        }
+        if (!options.includes('opt3') && !options.includes('opt4') && !options.includes('opt5')) {
+            console.log('bitch');
+            for (let check of PayPac) {
+                check.setAttribute('value', 0);
+                check.labels.forEach(label => {
+                    label.innerText = 'Зa упаковку ' + 0 + ' руб.';
+                })
+            }
+        }
+        if (!options.includes('opt6')) {
+            for (let check of PayIns) {
+                check.setAttribute('value', 0);
+                check.labels.forEach(label => {
+                    label.innerText = 'Зa страховку ' + 0 + ' руб.';
+                })
+            }
+        }
+        if (!options.includes('opt7')) {
+            for (let check of PayPRRatAddress) {
+                check.setAttribute('value', 0);
+                check.labels.forEach(label => {
+                    label.innerText = 'Зa ПРР на адресе забора груза ' + 0 + ' руб.';
+                })
+            }
+        }
+        if (!options.includes('opt8')) {
+            for (let check of PayPRRtoAddress) {
+                check.setAttribute('value', 0);
+                check.labels.forEach(label => {
+                    label.innerText = 'Зa ПРР на адресе доставки ' + 0 + ' руб.';
+                })
+            }
+        }
+
         for (let check of PayAll) {
             check.value = Math.round(price);
         }
@@ -1840,7 +1922,31 @@ for (let inp of allInputs) {
 
 
 for (let check of Sender) {
-    check.addEventListener('input', () => {
+    check.addEventListener('click', () => {
+        let arr = [];
+        for (let ch of Sender) {
+            if (ch.checked==true) {
+                arr.push(ch);
+                document.getElementById('INNsender').setAttribute('required', '');
+                document.getElementById('FIOsender').setAttribute('required', '');
+                document.getElementById('Telsender').setAttribute('required', '');
+                document.getElementById('Emailsender').setAttribute('required', '');
+            } else if (ch.checked == false) {
+                for(var i = arr.length - 1; i >= 0; i--) {
+                    if(arr[i] === ch) {
+                        arr.splice(i, 1);
+                    }
+                }
+            }
+            console.log(arr);
+            if (arr.length == 0) {
+                document.getElementById('INNsender').removeAttribute('required');
+                document.getElementById('FIOsender').removeAttribute('required');
+                document.getElementById('Telsender').removeAttribute('required');
+                document.getElementById('Emailsender').removeAttribute('required');
+            }
+        }
+
         if (express.checked == true) {
             CalculateExpress('total');
         } else if (econom.checked == true) {
@@ -1851,7 +1957,30 @@ for (let check of Sender) {
     })
 }
 for (let check of Receiver) {
-    check.addEventListener('input', () => {
+    check.addEventListener('click', () => {
+        let arr = [];
+        for (let ch of Receiver) {
+            if (ch.checked==true) {
+                arr.push(ch);
+                document.getElementById('INNreceiver').setAttribute('required', '');
+                document.getElementById('FIOreceiver').setAttribute('required', '');
+                document.getElementById('Telreceiver').setAttribute('required', '');
+                document.getElementById('Emailreceiver').setAttribute('required', '');
+            } else if (ch.checked == false) {
+                for(var i = arr.length - 1; i >= 0; i--) {
+                    if(arr[i] === ch) {
+                        arr.splice(i, 1);
+                    }
+                }
+            }
+            console.log(arr);
+            if (arr.length == 0) {
+                document.getElementById('INNreceiver').removeAttribute('required');
+                document.getElementById('FIOreceiver').removeAttribute('required');
+                document.getElementById('Telreceiver').removeAttribute('required');
+                document.getElementById('Emailreceiver').removeAttribute('required');
+            }
+        }
         if (express.checked == true) {
             CalculateExpress('total');
         } else if (econom.checked == true) {
@@ -1860,24 +1989,170 @@ for (let check of Receiver) {
         CalculateSubtotals('receiver');
     })
 }
+
 for (let check of ThirdParty) {
-    check.addEventListener('input', () => {
-        if (express.checked == true) {
-            CalculateExpress('total');
-        } else if (econom.checked == true) {
-            CalculatorEco('total')
+    check.addEventListener('click', () => {
+        let arr = [];
+        for (let ch of ThirdParty) {
+            if (ch.checked == true) {
+                arr.push(ch);
+                document.getElementById('INN3dparty').setAttribute('required', '');
+                document.getElementById('FIO3dparty').setAttribute('required', '');
+                document.getElementById('Tel3dparty').setAttribute('required', '');
+                document.getElementById('Email3dparty').setAttribute('required', '');
+            } else if (ch.checked == false) {
+                for (var i = arr.length - 1; i >= 0; i--) {
+                    if (arr[i] === ch) {
+                        arr.splice(i, 1);
+                    }
+                }
+            }
+            console.log(arr);
+            if (arr.length == 0) {
+                document.getElementById('INN3dparty').removeAttribute('required');
+                document.getElementById('FIO3dparty').removeAttribute('required');
+                document.getElementById('Tel3dparty').removeAttribute('required');
+                document.getElementById('Email3dparty').removeAttribute('required');
+            }
+            if (express.checked == true) {
+                    CalculateExpress('total');
+                } else if (econom.checked == true) {
+                    CalculatorEco('total')
+                }
+                CalculateSubtotals('3dparty');
+            }
         }
-        CalculateSubtotals('3dparty');
-    })
-}
+    )}
 
-document.getElementById('PayAllSender').addEventListener('input', () => {
-
+document.getElementById('PayAllSender').addEventListener('click', () => {
+    let arr = [];
+    if (document.getElementById('PayAllSender').checked==true) {
+        arr.push(document.getElementById('PayAllSender'));
+        document.getElementById('INNsender').setAttribute('required', '');
+        document.getElementById('FIOsender').setAttribute('required', '');
+        document.getElementById('Telsender').setAttribute('required', '');
+        document.getElementById('Emailsender').setAttribute('required', '');
+    } else if (document.getElementById('PayAllSender').checked == false) {
+        for(var i = arr.length - 1; i >= 0; i--) {
+            if(arr[i] === document.getElementById('PayAllSender')) {
+                arr.splice(i, 1);
+            }
+        }
+    }
+    console.log(arr);
+    if (arr.length == 0) {
+        document.getElementById('INNsender').removeAttribute('required');
+        document.getElementById('FIOsender').removeAttribute('required');
+        document.getElementById('Telsender').removeAttribute('required');
+        document.getElementById('Emailsender').removeAttribute('required');
+    }
     CalculateSubtotals('sender');
 })
-document.getElementById('PayAllReceiver').addEventListener('input', () => {
+document.getElementById('PayAllReceiver').addEventListener('click', () => {
+    let arr = [];
+    if (document.getElementById('PayAllReceiver').checked==true) {
+        arr.push(document.getElementById('PayAllReceiver'));
+        document.getElementById('INNreceiver').setAttribute('required', '');
+        document.getElementById('FIOreceiver').setAttribute('required', '');
+        document.getElementById('Telreceiver').setAttribute('required', '');
+        document.getElementById('Emailreceiver').setAttribute('required', '');
+    } else if (document.getElementById('PayAllReceiver').checked == false) {
+        for(var i = arr.length - 1; i >= 0; i--) {
+            if(arr[i] === document.getElementById('PayAllReceiver')) {
+                arr.splice(i, 1);
+            }
+        }
+    }
+    console.log(arr);
+    if (arr.length == 0) {
+        document.getElementById('INNreceiver').removeAttribute('required');
+        document.getElementById('FIOreceiver').removeAttribute('required');
+        document.getElementById('Telreceiver').removeAttribute('required');
+        document.getElementById('Emailreceiver').removeAttribute('required');
+    }
     CalculateSubtotals('receiver');
 })
-document.getElementById('PayAll3dparty').addEventListener('input', () => {
+document.getElementById('PayAll3dparty').addEventListener('click', () => {
+    let arr = [];
+    if (document.getElementById('PayAll3dparty').checked == true) {
+        arr.push(document.getElementById('PayAll3dparty'));
+        document.getElementById('INN3dparty').setAttribute('required', '');
+        document.getElementById('FIO3dparty').setAttribute('required', '');
+        document.getElementById('Tel3dparty').setAttribute('required', '');
+        document.getElementById('Email3dparty').setAttribute('required', '');
+    } else if (document.getElementById('PayAll3dparty').checked == false) {
+        for (var i = arr.length - 1; i >= 0; i--) {
+            if (arr[i] === document.getElementById('PayAll3dparty')) {
+                arr.splice(i, 1);
+            }
+        }
+    }
+    console.log(arr);
+    if (arr.length == 0) {
+        document.getElementById('INN3dparty').removeAttribute('required');
+        document.getElementById('FIO3dparty').removeAttribute('required');
+        document.getElementById('Tel3dparty').removeAttribute('required');
+        document.getElementById('Email3dparty').removeAttribute('required');
+    }
     CalculateSubtotals('3dparty');
 })
+
+
+
+let form = document.getElementById('form');
+ form.addEventListener('submit', (event) => {
+     event.preventDefault();
+
+     let elements = form.elements;
+     let obj ={};
+     for(let i = 0 ; i < elements.length ; i++){
+         let item = elements.item(i);
+         if (item.checked){
+             obj[item.id] = item.value;
+
+         }
+
+     }
+    AllPaymentChecks.forEach(check => {
+        check.forEach(ch => {
+            ch.remove();
+        })
+    })
+     for (let check of checkboxes) {
+         check.remove();
+     }
+     for (let check of document.querySelectorAll("input[type=checkbox]")) {
+         check.remove();
+     }
+     for (let check of document.querySelectorAll("input[type=radio]")) {
+         check.remove();
+     }
+
+
+     for(let i = 0 ; i < elements.length ; i++){
+         let item = elements.item(i);
+
+         obj[item.id] = item.value;
+
+     }
+     let res = JSON.stringify(obj);
+     // let request = new XMLHttpRequest();
+     // // строка с параметрами для отправки
+     // request.open("POST", "sendinfo.php");
+     // request.send(res);
+     //let data = request.responseXML;
+     //console.log(data);
+     let xmlhttp=new XMLHttpRequest();
+     xmlhttp.open("POST","sendinfo.php", );
+     xmlhttp.responseType = 'text';
+     xmlhttp.setRequestHeader("Content-type","application/json");
+     xmlhttp.send(res);
+
+     xmlhttp.onload = function() {
+         let responseObj = xmlhttp.responseText;
+         console.log(responseObj);
+     };
+
+
+     //document.getElementById("demo").innerHTML = JSON.stringify(obj);
+ })
