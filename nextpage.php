@@ -268,7 +268,7 @@ include 'proceed.php';
 
                     <div class="container mt-5">
                         <div class="form-check">
-                            <input class="form-check-input PayAll" type="radio" name="PayAll[]" value="" id="PayAllSender" required>
+                            <input class="form-check-input PayAll" type="radio" name="PayAll[]" value="" id="PayAllSender">
                             <label class="form-check-label" for="PayAllSender">
                                 За все
                             </label>

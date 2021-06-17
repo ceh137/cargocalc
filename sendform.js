@@ -2113,6 +2113,7 @@ let form = document.getElementById('form');
          }
 
      }
+     obj['total'] = document.getElementById('PayAllSender').value;
     AllPaymentChecks.forEach(check => {
         check.forEach(ch => {
             ch.remove();
