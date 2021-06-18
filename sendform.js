@@ -875,6 +875,8 @@ function CalculateExpress(res) {
         })
     }
 
+    document.getElementById('TT_price').value = TT;
+
 
 
     // Options
@@ -893,6 +895,7 @@ function CalculateExpress(res) {
                         label.innerText = 'Зa ПРР на адресе доставки ' + PRRtoAdressPrice + ' руб.';
                     })
                 }
+                document.getElementById('PRRtoAddress_price').value = PRRtoAdressPrice;
                 break;
             case "opt7":
                 let PRRfromAdressPrice = PRRfromAddress * weight/20;
@@ -904,6 +907,7 @@ function CalculateExpress(res) {
                         label.innerText = 'Зa ПРР на адресе забора груза ' + PRRfromAdressPrice + ' руб.';
                     })
                 }
+                document.getElementById('PRRatAddress_price').value = PRRfromAdressPrice;
                 break;
             case "opt6":
                 let insurance = 0
@@ -935,6 +939,8 @@ function CalculateExpress(res) {
                         label.innerText = 'Зa страховку ' + insurance+ ' руб.';
                     })
                 }
+
+                document.getElementById('insurance_price').value = insurance;
                 //insuranceLabel.innerText = "Страховка (" + insurance.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt5":
@@ -956,6 +962,7 @@ function CalculateExpress(res) {
                         label.innerText = 'Зa упаковку ' + bortPrice + ' руб.';
                     })
                 }
+
                 //bortLabel.innerText = "Упаковка в паллет-борт (" + bortPrice.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt4":
@@ -1019,6 +1026,7 @@ function CalculateExpress(res) {
                 for (let check of PayFromAddressToTerm) {
                     check.setAttribute('value', fromAddressPrice);
                 }
+                document.getElementById('DelFromAddress_price').value = fromAddressPrice;
                 //fromAddressLabel.innerText = "Забор груза на адресе (" + fromAddressPrice.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt1":
@@ -1064,6 +1072,7 @@ function CalculateExpress(res) {
                     check.setAttribute('value', toAddressPrice);
                 }
                 price += toAddressPrice;
+                document.getElementById('DelToAddress_price').value = toAddressPrice;
             //toAddressLabel.innerText = "Доставка груза на адрес (" + toAddressPrice.toLocaleString('ru-Ru') + " руб.)";
             default:
                 break;
@@ -1218,8 +1227,7 @@ function CalculateExpress(res) {
     } else if (res == 'total') {
         let result = document.getElementById("total");
 
-        console.log(options.includes('opt3'));
-        console.log(options.includes('opt5'));
+
         if ((options.includes('opt3') || options.includes('opt5')) && options.includes('opt4')) {
             let pacPrice = 0;
             if (options.includes('opt3') && options.includes('opt4')) {
@@ -1277,6 +1285,11 @@ function CalculateExpress(res) {
             }
         }
 
+        document.getElementById('stretch_price').value = stretchPacPrice;
+        document.getElementById('bort_price').value = bortPrice;
+        document.getElementById('rigid_pac_price').value = rigidPacPrice;
+
+        document.getElementById('totalhidden').value = price;
         for (let check of PayAll) {
             check.value = Math.round(price);
         }
@@ -1337,7 +1350,12 @@ function CalculatorEco(res) {
     }
     for (let check of PayTermTransfer) {
         check.value = Math.round(price);
+        check.labels.forEach(label => {
+            label.innerText = 'Зa терминальную доставку ' + Math.round(price) + ' руб.';
+        })
     }
+
+    document.getElementById('TT_price').value = TT;
 
 
 
@@ -1357,6 +1375,8 @@ function CalculatorEco(res) {
                         label.innerText = 'Зa ПРР на адресе доставки ' + PRRtoAdressPrice + ' руб.';
                     })
                 }
+                document.getElementById('PRRtoAddress_price').value = PRRtoAdressPrice;
+
                 break;
             case "opt7":
                 let PRRfromAdressPrice = PRRfromAddress * weight/20;
@@ -1368,6 +1388,8 @@ function CalculatorEco(res) {
                         label.innerText = 'Зa ПРР на адресе забора груза ' + PRRfromAdressPrice + ' руб.';
                     })
                 }
+                document.getElementById('PRRatAddress_price').value = PRRfromAdressPrice;
+
                 break;
             case "opt6":
                 let insurance = 0
@@ -1394,8 +1416,13 @@ function CalculatorEco(res) {
                 }
                 for (let check of PayIns) {
                     check.setAttribute('value', insurance);
+                    check.labels.forEach(label => {
+                        label.innerText = 'Зa страховку ' + insurance+ ' руб.';
+                    })
                 }
-                insuranceLabel.innerText = "Страховка (" + insurance.toLocaleString('ru-Ru') + " руб.)";
+                document.getElementById('insurance_price').value = insurance;
+
+                //insuranceLabel.innerText = "Страховка (" + insurance.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt5":
 
@@ -1412,8 +1439,11 @@ function CalculatorEco(res) {
                 price += bortPrice;
                 for (let check of PayPac) {
                     check.setAttribute('value', bortPrice);
+                    check.labels.forEach(label => {
+                        label.innerText = 'Зa упаковку ' + bortPrice + ' руб.';
+                    })
                 }
-                bortLabel.innerText = "Упаковка в паллет-борт (" + bortPrice.toLocaleString('ru-Ru') + " руб.)";
+                //bortLabel.innerText = "Упаковка в паллет-борт (" + bortPrice.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt4":
 
@@ -1430,9 +1460,10 @@ function CalculatorEco(res) {
                 price += stretchPacPrice;
                 for (let check of PayPac) {
                     check.setAttribute('value', stretchPacPrice);
+                    check.labels.forEach(label => {
+                        label.innerText = 'Зa упаковку ' + stretchPacPrice + ' руб.';
+                    })
                 }
-                stretchPacLabel.innerText = "Упаковка в стретч-пленку (" + stretchPacPrice.toLocaleString('ru-Ru') + " руб.)";
-                break;
             case "opt3":
 
                 if (priceType() == "minP" || priceType() == "single" || priceType() == "docs") {
@@ -1449,6 +1480,9 @@ function CalculatorEco(res) {
                 price += rigidPacPrice;
                 for (let check of PayPac) {
                     check.setAttribute('value', rigidPacPrice);
+                    check.labels.forEach(label => {
+                        label.innerText = 'Зa упаковку ' + rigidPacPrice + ' руб.';
+                    })
                 }
                 rigidPacLabel.innerText = "Жесткая упаковка (" + rigidPacPrice.toLocaleString('ru-Ru') + " руб.)";
                 break;
@@ -1469,6 +1503,8 @@ function CalculatorEco(res) {
                 for (let check of PayFromAddressToTerm) {
                     check.setAttribute('value', fromAddressPrice);
                 }
+                document.getElementById('DelFromAddress_price').value = fromAddressPrice;
+
                 fromAddressLabel.innerText = "Забор груза на адресе (" + fromAddressPrice.toLocaleString('ru-Ru') + " руб.)";
                 break;
             case "opt1":
@@ -1512,6 +1548,8 @@ function CalculatorEco(res) {
                     check.setAttribute('value', toAddressPrice);
                 }
                 price += toAddressPrice;
+                document.getElementById('DelToAddress_price').value = toAddressPrice;
+
             //toAddressLabel.innerText = "Доставка груза на адрес (" + toAddressPrice.toLocaleString('ru-Ru') + " руб.)";
             default:
                 break;
@@ -1663,11 +1701,10 @@ function CalculatorEco(res) {
         result.innerText = 'Стоимость ЭКСПРЕСС: ' + price.toLocaleString('ru-RU') + ' руб.';
     } else if (res == 'total') {
         let result = document.getElementById("total");
-        let pacPrice = 0;
-        console.log(options.includes('opt3'));
-        console.log(options.includes('opt5'));
-        if ((options.includes('opt3') || options.includes('opt5')) && options.includes('opt4')) {
 
+
+        if ((options.includes('opt3') || options.includes('opt5')) && options.includes('opt4')) {
+            let pacPrice = 0;
             if (options.includes('opt3') && options.includes('opt4')) {
                 pacPrice = rigidPacPrice + stretchPacPrice;
             } else if (options.includes('opt5') && options.includes('opt4')) {
@@ -1678,6 +1715,57 @@ function CalculatorEco(res) {
             }
 
         }
+
+        if (!options.includes('opt1')) {
+            for (let check of PayFromTermToAddress) {
+                check.setAttribute('value', 0);
+            }
+        }
+        if (!options.includes('opt2')) {
+            for (let check of PayFromAddressToTerm) {
+                check.setAttribute('value', 0);
+            }
+        }
+        if (!options.includes('opt3') && !options.includes('opt4') && !options.includes('opt5')) {
+            console.log('bitch');
+            for (let check of PayPac) {
+                check.setAttribute('value', 0);
+                check.labels.forEach(label => {
+                    label.innerText = 'Зa упаковку ' + 0 + ' руб.';
+                })
+            }
+        }
+        if (!options.includes('opt6')) {
+            for (let check of PayIns) {
+                check.setAttribute('value', 0);
+                check.labels.forEach(label => {
+                    label.innerText = 'Зa страховку ' + 0 + ' руб.';
+                })
+            }
+        }
+        if (!options.includes('opt7')) {
+            for (let check of PayPRRatAddress) {
+                check.setAttribute('value', 0);
+                check.labels.forEach(label => {
+                    label.innerText = 'Зa ПРР на адресе забора груза ' + 0 + ' руб.';
+                })
+            }
+        }
+        if (!options.includes('opt8')) {
+            for (let check of PayPRRtoAddress) {
+                check.setAttribute('value', 0);
+                check.labels.forEach(label => {
+                    label.innerText = 'Зa ПРР на адресе доставки ' + 0 + ' руб.';
+                })
+            }
+        }
+
+        document.getElementById('stretch_price').value = stretchPacPrice;
+        document.getElementById('bort_price').value = bortPrice;
+        document.getElementById('rigid_pac_price').value = rigidPacPrice;
+
+        document.getElementById('totalhidden').value = price;
+
         for (let check of PayAll) {
             check.value = price;
         }
@@ -1707,6 +1795,7 @@ function CalculateSubtotals(who) {
         }
         console.log(subtotal);
         document.getElementById('PaymentSender').innerText = 'Оплата: ' + subtotal.toLocaleString('ru-RU');
+        document.getElementById('amount_sender').value = subtotal;
     //} else if (who == 'receiver') {
         subtotal = 0;
         for (let check of Receiver) {
@@ -1726,6 +1815,7 @@ function CalculateSubtotals(who) {
         }
         console.log(subtotal);
         document.getElementById('PaymentReceiver').innerText = 'Оплата: ' + subtotal.toLocaleString('ru-RU');
+    document.getElementById('amount_receiver').value = subtotal;
    // } else if (who = '3dparty') {
         subtotal = 0;
         for (let check of ThirdParty) {
@@ -1745,6 +1835,7 @@ function CalculateSubtotals(who) {
         }
         console.log(subtotal);
         document.getElementById('Payment3dparty').innerText = 'Оплата: ' + subtotal.toLocaleString('ru-RU');
+    document.getElementById('amount_3dparty').value = subtotal;
    //}
 
 }
@@ -1879,7 +1970,7 @@ for (let city of cities) {
 }
 
 for (let inp of allInputs) {
-    inp.addEventListener('input', () => {
+    inp.addEventListener('change', () => {
         if (express.checked == true) {
             CalculateExpress('total');
         } else if (econom.checked == true) {
@@ -1917,6 +2008,8 @@ for (let inp of allInputs) {
                 })
             })
         })
+
+
     })
 }
 
@@ -1954,6 +2047,14 @@ for (let check of Sender) {
         }
 
         CalculateSubtotals('sender');
+        PayPac.forEach(check => {
+
+            check.labels.forEach(label => {
+                label.innerText = 'За упаковку  ' + check.value +' руб.';
+            })
+
+
+        })
     })
 }
 for (let check of Receiver) {
@@ -1987,9 +2088,17 @@ for (let check of Receiver) {
             CalculatorEco('total')
         }
         CalculateSubtotals('receiver');
-    })
-}
+        PayPac.forEach(check => {
 
+            check.labels.forEach(label => {
+                label.innerText = 'За упаковку  ' + check.value +' руб.';
+            })
+
+
+        })
+    })
+
+}
 for (let check of ThirdParty) {
     check.addEventListener('click', () => {
         let arr = [];
@@ -2021,6 +2130,14 @@ for (let check of ThirdParty) {
                 }
                 CalculateSubtotals('3dparty');
             }
+        PayPac.forEach(check => {
+
+            check.labels.forEach(label => {
+                label.innerText = 'За упаковку  ' + check.value +' руб.';
+            })
+
+
+        })
         }
     )}
 
@@ -2097,62 +2214,85 @@ document.getElementById('PayAll3dparty').addEventListener('click', () => {
     CalculateSubtotals('3dparty');
 })
 
+for (let inp of allInputs) {
+    inp.addEventListener('change', () => {
+        PayPac.forEach(check => {
+
+            check.labels.forEach(label => {
+                label.innerText = 'За упаковку  ' + check.value +' руб.';
+            })
+
+
+        })
+    })
+}
 
 
 let form = document.getElementById('form');
  form.addEventListener('submit', (event) => {
      event.preventDefault();
+     let sender = +document.getElementById('amount_sender').value;
+     let receiver = +document.getElementById('amount_receiver').value;
+     let third = +document.getElementById('amount_3dparty').value;
 
-     let elements = form.elements;
-     let obj ={};
-     for(let i = 0 ; i < elements.length ; i++){
-         let item = elements.item(i);
-         if (item.checked){
+     if ((sender+receiver+third) < +document.getElementById('totalhidden').value) {
+         document.getElementById('warning').innerText = "Выберите все, что нужно оплатить!"
+     } else {
+         let elements = form.elements;
+         let obj ={};
+         for(let i = 0 ; i < elements.length ; i++){
+             let item = elements.item(i);
+             if (item.checked){
+                 obj[item.id] = item.value;
+
+             }
+
+         }
+         obj['total'] = document.getElementById('PayAllSender').value;
+         AllPaymentChecks.forEach(check => {
+             check.forEach(ch => {
+                 ch.remove();
+             })
+         })
+         for (let check of checkboxes) {
+             check.remove();
+         }
+         for (let check of document.querySelectorAll("input[type=checkbox]")) {
+             check.remove();
+         }
+         for (let check of document.querySelectorAll("input[type=radio]")) {
+             check.remove();
+         }
+
+
+         for(let i = 0 ; i < elements.length ; i++){
+             let item = elements.item(i);
+
              obj[item.id] = item.value;
 
          }
+         let res = JSON.stringify(obj);
+         // let request = new XMLHttpRequest();
+         // // строка с параметрами для отправки
+         // request.open("POST", "sendinfo.php");
+         // request.send(res);
+         //let data = request.responseXML;
+         //console.log(data);
+         let xmlhttp=new XMLHttpRequest();
+         xmlhttp.open("POST","sendinfo.php", );
+         xmlhttp.responseType = 'text';
+         xmlhttp.setRequestHeader("Content-type","application/json");
+         xmlhttp.send(res);
+
+         document.location.href = "success.html";
+
+         xmlhttp.onload = function() {
+             let responseObj = xmlhttp.responseText;
+             console.log(responseObj);
+         };
 
      }
-     obj['total'] = document.getElementById('PayAllSender').value;
-    AllPaymentChecks.forEach(check => {
-        check.forEach(ch => {
-            ch.remove();
-        })
-    })
-     for (let check of checkboxes) {
-         check.remove();
-     }
-     for (let check of document.querySelectorAll("input[type=checkbox]")) {
-         check.remove();
-     }
-     for (let check of document.querySelectorAll("input[type=radio]")) {
-         check.remove();
-     }
 
-
-     for(let i = 0 ; i < elements.length ; i++){
-         let item = elements.item(i);
-
-         obj[item.id] = item.value;
-
-     }
-     let res = JSON.stringify(obj);
-     // let request = new XMLHttpRequest();
-     // // строка с параметрами для отправки
-     // request.open("POST", "sendinfo.php");
-     // request.send(res);
-     //let data = request.responseXML;
-     //console.log(data);
-     let xmlhttp=new XMLHttpRequest();
-     xmlhttp.open("POST","sendinfo.php", );
-     xmlhttp.responseType = 'text';
-     xmlhttp.setRequestHeader("Content-type","application/json");
-     xmlhttp.send(res);
-
-     xmlhttp.onload = function() {
-         let responseObj = xmlhttp.responseText;
-         console.log(responseObj);
-     };
 
 
      //document.getElementById("demo").innerHTML = JSON.stringify(obj);

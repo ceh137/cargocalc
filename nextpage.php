@@ -459,10 +459,26 @@ include 'proceed.php';
 
                 </div>
             </div>
+            <h6 id="warning"></h6>
             <h1 id="total" class="mt-5">ИТОГО:</h1>
             <br>
             <input type="submit" class="btn btn-primary my-5">
         </div>
+
+        <input type="hidden" id="stretch_price">
+        <input type="hidden" id="rigid_pac_price">
+        <input type="hidden" id="bort_price">
+        <input type="hidden" id="TT_price">
+        <input type="hidden" id="insurance_price">
+        <input type="hidden" id="PRRtoAddress_price">
+        <input type="hidden" id="PRRatAddress_price">
+        <input type="hidden" id="DelToAddress_price">
+        <input type="hidden" id="DelFromAddress_price">
+
+        <input type="hidden" id="amount_sender">
+        <input type="hidden" id="amount_receiver">
+        <input type="hidden" id="amount_3dparty">
+        <input type="hidden" id="totalhidden">
     </form>
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script src="ahunter-suggest.js"></script>
